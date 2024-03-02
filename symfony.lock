@@ -248,7 +248,7 @@
             "./templates/base.html.twig"
         ]
     },
-    "symfony/ux-turbo": {
+    "symfony/ux-chartjs": {
         "version": "v2.16.0"
     },
     "symfony/validator": {

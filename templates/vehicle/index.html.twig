@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello VehicleController!{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h1>Automobiliai</h1>
+                <table class="table table-hover table-dark">
+                    <thead>
+                        <tr>
+                            <th scope="col">id</th>
+                            <th scope="col">Type</th>
+                            <th scope="col">Make</th>
+                            <th scope="col">Model</th>
+                            <th scope="col">Year</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for vehicle in vehicles  %}
+                        <tr>
+                            <th scope="row">{{ vehicle.id }}</th>
+                            <td>{{ vehicle.type }}</td>
+                            <td>{{ vehicle.make }}</td>
+                            <td>{{ vehicle.model }}</td>
+                            <td>{{ vehicle.year }}</td>
+                            <td>Some actions</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <h1>Prideti automobilius</h1>
+                <form method="POST">
+                    <select name="type" class="form-select" aria-label="Type of vehicle" required>
+                        <option disabled selected>Choose your vehicle type</option>
+                        <option value="car">Car</option>
+                        <option value="motorcycle">Motorcycle</option>
+                        <option value="van">Van</option>
+                    </select>
+                    <hr>
+                    <div class="form-floating mb-3">
+                        <input name="make" type="make" class="form-control" id="makeInput" placeholder="Vehicle make" required>
+                        <label for="makeInput" style="color: black;">Vehicle make</label>
+                    </div>
+                    <hr>
+                    <div class="form-floating mb-3">
+                        <input name="model" type="model" class="form-control" id="modelInput" placeholder="Vehicle model" required>
+                        <label for="modelInput" style="color: black;">Vehicle model</label>
+                    </div>
+                    <hr>
+                    <label for="year" class="form-label">Make year</label>
+                    <input name="year" id="year" class="form-control" type="date" placeholder="2008" aria-label="default input example" required>
+                    <button type="submit" class="btn btn-primary">Add</button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

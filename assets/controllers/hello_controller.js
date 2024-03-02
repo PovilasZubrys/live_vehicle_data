@@ -11,6 +11,55 @@ import { Controller } from '@hotwired/stimulus';
  */
 export default class extends Controller {
     connect() {
-        this.element.textContent = 'Hello Stimulus! Edit me in assets/controllers/hello_controller.js';
+        this.element.addEventListener('chartjs:connect', this._onConnect);
+    }
+
+    disconnect() {
+        // You should always remove listeners when the controller is disconnected to avoid side effects
+        this.element.removeEventListener('chartjs:connect', this._onConnect);
+    }
+
+    _onConnect(event) {
+        function addData(chart, label, newData) {
+            chart.data.labels.push(label);
+            chart.data.datasets.forEach((dataset) => {
+                dataset.data.push(newData);
+            });
+            chart.update();
+        }
+
+        function removeData(chart) {
+            chart.data.labels.shift();
+            chart.data.datasets.forEach((dataset) => {
+                dataset.data.shift();
+            });
+            chart.update();
+        }
+
+        function getSpeed()
+        {
+            let xhr = new XMLHttpRequest();
+
+            // Making our connection
+            let url = window.location.href + 'getSpeed';
+            xhr.open("GET", url, true);
+
+            // function execute after request is successful
+            xhr.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    addData(event.detail.chart, this.responseText, this.responseText)
+                    removeData(event.detail.chart)
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+
+            xhr.send();
+
+            setTimeout(getSpeed, 2000)
+        }
+
+        getSpeed()
     }
 }
