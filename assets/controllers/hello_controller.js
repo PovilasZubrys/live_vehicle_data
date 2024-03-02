@@ -49,9 +49,6 @@ export default class extends Controller {
                 if (this.readyState == 4 && this.status == 200) {
                     addData(event.detail.chart, this.responseText, this.responseText)
                     removeData(event.detail.chart)
-                    return true;
-                } else {
-                    return false;
                 }
             }
 
