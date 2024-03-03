@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Speed;
 use App\Entity\Vehicle;
 use App\Model\VehicleModel;
 use Doctrine\ORM\EntityManagerInterface;
@@ -9,7 +10,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\UX\Chartjs\Builder\ChartBuilder;
 use Symfony\UX\Chartjs\Builder\ChartBuilderInterface;
 use Symfony\UX\Chartjs\Model\Chart;
 
@@ -47,11 +47,11 @@ class VehicleController extends AbstractController
         $labels = [];
         $speedData = [];
 
-        $this->em->getRepository(Vehicle::class)->findOneBy(['vehicle_id' => $id, 'id' => 'DESC']);
+        $speedResults = $this->em->getRepository(Speed::class)->findBy(['vehicle' => $id], ['id' => 'DESC'], 50);
 
-        foreach ($speed as $value) {
-            $labels[] = (int) $value['value'];
-            $speedData[] = (int) $value['value'];
+        foreach ($speedResults as $value) {
+            $labels[] = (int) $value->getValue();
+            $speedData[] = (int) $value->getValue();
         }
 
         $chart->setData([
@@ -75,9 +75,16 @@ class VehicleController extends AbstractController
             ],
         ]);
 
-        return $this->render('vehicle/index.html.twig', [
+        return $this->render('vehicle/track_vehicles.html.twig', [
             'controller_name' => 'VehicleController',
-            'vehicles' => $vehicles
+            'chart' => $chart,
+            'vehicle_id' => $id
         ]);
+    }
+
+    #[Route('/get_vehicle_data/{id}/{dataType}', name: 'app_get_vehicle_data')]
+    public function getData(VehicleModel $vehicleModel, $id, $dataType): Response
+    {
+        return $this->json((int) $vehicleModel->getVehicleData($id,$dataType));
     }
 }

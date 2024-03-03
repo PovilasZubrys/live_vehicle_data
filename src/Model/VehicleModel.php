@@ -30,4 +30,13 @@ class VehicleModel
         }
         return true;
     }
+
+    public function getVehicleData(int $id, string $dataType): string|int
+    {
+        $sql = "SELECT value FROM $dataType WHERE vehicle_id = $id ORDER BY id DESC";
+
+        $response = $this->em->getConnection()->prepare($sql)->executeQuery()->fetchOne();
+
+        return $response;
+    }
 }

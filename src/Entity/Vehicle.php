@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\VehicleRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: VehicleRepository::class)]
@@ -27,6 +29,14 @@ class Vehicle
 
     #[ORM\OneToOne(mappedBy: 'vehicle', cascade: ['persist', 'remove'])]
     private ?Device $device = null;
+
+    #[ORM\OneToMany(targetEntity: Speed::class, mappedBy: 'vehicle', orphanRemoval: true)]
+    private Collection $speeds;
+
+    public function __construct()
+    {
+        $this->speeds = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -99,6 +109,36 @@ class Vehicle
         }
 
         $this->device = $device;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Speed>
+     */
+    public function getSpeeds(): Collection
+    {
+        return $this->speeds;
+    }
+
+    public function addSpeed(Speed $speed): static
+    {
+        if (!$this->speeds->contains($speed)) {
+            $this->speeds->add($speed);
+            $speed->setVehicle($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSpeed(Speed $speed): static
+    {
+        if ($this->speeds->removeElement($speed)) {
+            // set the owning side to null (unless already changed)
+            if ($speed->getVehicle() === $this) {
+                $speed->setVehicle(null);
+            }
+        }
 
         return $this;
     }
