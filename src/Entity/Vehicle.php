@@ -25,6 +25,9 @@ class Vehicle
     #[ORM\Column(length: 255)]
     private ?string $year = null;
 
+    #[ORM\OneToOne(mappedBy: 'vehicle', cascade: ['persist', 'remove'])]
+    private ?Device $device = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -74,6 +77,28 @@ class Vehicle
     public function setYear(string $year): static
     {
         $this->year = $year;
+
+        return $this;
+    }
+
+    public function getDevice(): ?Device
+    {
+        return $this->device;
+    }
+
+    public function setDevice(?Device $device): static
+    {
+        // unset the owning side of the relation if necessary
+        if ($device === null && $this->device !== null) {
+            $this->device->setVehicle(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($device !== null && $device->getVehicle() !== $this) {
+            $device->setVehicle($this);
+        }
+
+        $this->device = $device;
 
         return $this;
     }

@@ -45,17 +45,19 @@
                     </select>
                     <hr>
                     <div class="form-floating mb-3">
-                        <input name="make" type="make" class="form-control" id="makeInput" placeholder="Vehicle make" required>
+                        <input name="make" type="text" class="form-control" id="makeInput" placeholder="Vehicle make" required>
                         <label for="makeInput" style="color: black;">Vehicle make</label>
                     </div>
                     <hr>
                     <div class="form-floating mb-3">
-                        <input name="model" type="model" class="form-control" id="modelInput" placeholder="Vehicle model" required>
+                        <input name="model" type="text" class="form-control" id="modelInput" placeholder="Vehicle model" required>
                         <label for="modelInput" style="color: black;">Vehicle model</label>
                     </div>
                     <hr>
-                    <label for="year" class="form-label">Make year</label>
-                    <input name="year" id="year" class="form-control" type="date" placeholder="2008" aria-label="default input example" required>
+                    <div class="form-floating mb-3">
+                        <input name="year" type="number" min="1900" max="2099" step="1" id="year" class="form-control" required>
+                        <label for="year" class="form-label" style="color: black;">Make year</label>
+                    </div>
                     <button type="submit" class="btn btn-primary">Add</button>
                 </form>
             </div>
