@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Rpm;
 use App\Entity\Speed;
 use App\Entity\Vehicle;
 use App\Model\VehicleModel;
@@ -43,19 +44,21 @@ class VehicleController extends AbstractController
     #[Route('/track_vehicle/{id}', name: 'app_track_vehicles')]
     public function trackVehicle(ChartBuilderInterface $chartBuilder, $id): Response
     {
-        $chart = $chartBuilder->createChart(Chart::TYPE_LINE);
-        $labels = [];
-        $speedData = [];
+        $speedChart = $chartBuilder->createChart(Chart::TYPE_LINE);
 
         $speedResults = $this->em->getRepository(Speed::class)->findBy(['vehicle' => $id], ['id' => 'DESC'], 50);
+        $rpmResults = $this->em->getRepository(Rpm::class)->findBy(['vehicle' => $id], ['id' => 'DESC'], 50);
+
+        $speedLabels = [];
+        $speedData = [];
 
         foreach ($speedResults as $value) {
-            $labels[] = (int) $value->getValue();
+            $speedLabels[] = (int) $value->getValue();
             $speedData[] = (int) $value->getValue();
         }
 
-        $chart->setData([
-            'labels' => $labels,
+        $speedChart->setData([
+            'labels' => $speedLabels,
             'datasets' => [
                 [
                     'label' => 'Speed',
@@ -65,26 +68,57 @@ class VehicleController extends AbstractController
                     'tension' => 0.4
                 ]
             ]
-        ]);
-        $chart->setOptions([
+        ])->setOptions([
             'scales' => [
                 'y' => [
                     'suggestedMin' => 0,
                     'suggestedMax' => 300,
+                ]
+            ]
+        ]);
+
+        $rpmChart = $chartBuilder->createChart(Chart::TYPE_LINE);
+
+        $rpmLabels = [];
+        $rpmData = [];
+
+        foreach ($rpmResults as $value) {
+            $rpmLabels[] = (int) $value->getValue();
+            $rpmData[] = (int) $value->getValue();
+        }
+
+        $rpmChart->setData([
+            'labels' => $rpmLabels,
+            'datasets' => [
+                [
+                    'label' => 'Rpm',
+                    'backgroundColor' => 'rgb(255, 99, 132)',
+                    'borderColor' => 'rgb(255, 99, 132)',
+                    'data' => $rpmData,
+                    'tension' => 0.4
+                ]
+            ]
+        ]);
+        $rpmChart->setOptions([
+            'scales' => [
+                'y' => [
+                    'suggestedMin' => 0,
+                    'suggestedMax' => 12500,
                 ]
             ],
         ]);
 
         return $this->render('vehicle/track_vehicles.html.twig', [
             'controller_name' => 'VehicleController',
-            'chart' => $chart,
+            'speedChart' => $speedChart,
+            'rpmChart' => $rpmChart,
             'vehicle_id' => $id
         ]);
     }
 
-    #[Route('/get_vehicle_data/{id}/{dataType}', name: 'app_get_vehicle_data')]
-    public function getData(VehicleModel $vehicleModel, $id, $dataType): Response
+    #[Route('/get_vehicle_data/{dataType}/{id}', name: 'app_get_vehicle_data')]
+    public function getData(VehicleModel $vehicleModel, $dataType, $id): Response
     {
-        return $this->json((int) $vehicleModel->getVehicleData($id,$dataType));
+        return $this->json($vehicleModel->getVehicleData($id,$dataType));
     }
 }

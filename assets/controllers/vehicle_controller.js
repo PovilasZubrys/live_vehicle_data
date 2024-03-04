@@ -33,7 +33,7 @@ export default class extends Controller {
         function getSpeed()
         {
             let xhr = new XMLHttpRequest();
-            let url = 'http://' + window.location.host + '/get_vehicle_data/' + vehicleId + '/' + dataType;
+            let url = 'http://' + window.location.host + '/get_vehicle_data/' + dataType + '/' + vehicleId;
             xhr.open("GET", url, true);
             xhr.onreadystatechange = function () {
                 if (this.readyState == 4 && this.status == 200) {

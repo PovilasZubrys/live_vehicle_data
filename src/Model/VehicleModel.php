@@ -2,11 +2,18 @@
 
 namespace App\Model;
 
+use App\Entity\Rpm;
+use App\Entity\Speed;
 use App\Entity\Vehicle;
 use Doctrine\ORM\EntityManagerInterface;
 
 class VehicleModel
 {
+    const AVAILABLE_ENTITIES = [
+        'speed' => Speed::class,
+        'rpm' => Rpm::class
+    ];
+
     public function __construct(EntityManagerInterface $em)
     {
         $this->em = $em;
@@ -31,12 +38,13 @@ class VehicleModel
         return true;
     }
 
-    public function getVehicleData(int $id, string $dataType): string|int
+    public function getVehicleData(int $id, string $dataType): int|null
     {
-        $sql = "SELECT value FROM $dataType WHERE vehicle_id = $id ORDER BY id DESC";
+        $value = $this->em->getRepository(self::AVAILABLE_ENTITIES[$dataType])->findOneBy(['vehicle' => $id], ['id' => 'DESC']);
 
-        $response = $this->em->getConnection()->prepare($sql)->executeQuery()->fetchOne();
-
-        return $response;
+        if (is_null($value)) {
+            return $value;
+        }
+        return $value->getValue();
     }
 }

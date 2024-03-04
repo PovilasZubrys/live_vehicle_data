@@ -33,9 +33,13 @@ class Vehicle
     #[ORM\OneToMany(targetEntity: Speed::class, mappedBy: 'vehicle', orphanRemoval: true)]
     private Collection $speeds;
 
+    #[ORM\OneToMany(targetEntity: Rpm::class, mappedBy: 'vehicle')]
+    private Collection $rpms;
+
     public function __construct()
     {
         $this->speeds = new ArrayCollection();
+        $this->rpms = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -137,6 +141,36 @@ class Vehicle
             // set the owning side to null (unless already changed)
             if ($speed->getVehicle() === $this) {
                 $speed->setVehicle(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Rpm>
+     */
+    public function getRpms(): Collection
+    {
+        return $this->rpms;
+    }
+
+    public function addRpm(Rpm $rpm): static
+    {
+        if (!$this->rpms->contains($rpm)) {
+            $this->rpms->add($rpm);
+            $rpm->setVehicle($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRpm(Rpm $rpm): static
+    {
+        if ($this->rpms->removeElement($rpm)) {
+            // set the owning side to null (unless already changed)
+            if ($rpm->getVehicle() === $this) {
+                $rpm->setVehicle(null);
             }
         }
 

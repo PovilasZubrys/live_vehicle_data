@@ -20,6 +20,10 @@ class Rpm
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $date = null;
 
+    #[ORM\ManyToOne(inversedBy: 'rpms')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?vehicle $vehicle = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -45,6 +49,18 @@ class Rpm
     public function setDate(\DateTimeInterface $date): static
     {
         $this->date = $date;
+
+        return $this;
+    }
+
+    public function getVehicle(): ?vehicle
+    {
+        return $this->vehicle;
+    }
+
+    public function setVehicle(?vehicle $vehicle): static
+    {
+        $this->vehicle = $vehicle;
 
         return $this;
     }
