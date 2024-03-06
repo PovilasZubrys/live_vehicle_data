@@ -30,27 +30,19 @@
         <div class="row">
             <div class="col">
                 <h1>Add device</h1>
-                <form method="POST">
+                {{ form_start(form) }}
                     <div class="form-floating mb-3">
-                        <input name="name" type="text" class="form-control" id="nameInput" placeholder="Device name" required>
-                        <label for="nameInput" style="color: black;">Device name</label>
+                        {{ form_widget(form.name) }}
+                        {{ form_label(form.name) }}
                     </div>
                     <hr>
                     <div class="form-floating mb-3">
-                        <input name="authentication_token" type="text" class="form-control" id="authenticationToken" placeholder="Authentication Token" required>
-                        <label for="authenticationToken" style="color: black;">Authentication Token</label>
+                        {{ form_widget(form.authentication_token) }}
+                        {{ form_label(form.authentication_token) }}
                     </div>
                     <hr>
-                    <label>Assign vehicle for this device: </label>
-                    {% for vehicle in vehicles  %}
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="vehicle" id="{{ vehicle.id }}" value="{{ vehicle.id }}">
-                            <label class="form-check-label" for="{{ vehicle.id }}">Id: {{ vehicle.id }} Vehicle info: {{ vehicle.make }}, {{ vehicle.model }}, {{ vehicle.year }}</label>
-                        </div>
-                    {% endfor %}
-
-                    <button type="submit" class="btn btn-primary">Add</button>
-                </form>
+                    {{ form_widget(form.vehicle) }}
+                {{ form_end(form) }}
             </div>
         </div>
     </div>

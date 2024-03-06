@@ -9,6 +9,9 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class DeviceModel
 {
+
+    private object $em;
+
     public function __construct(EntityManagerInterface $em)
     {
         $this->em = $em;
@@ -34,4 +37,15 @@ class DeviceModel
         return true;
     }
 
+    public function getVehicleChoices()
+    {
+        $vehicles = $this->em->getRepository(Vehicle::class)->findBy(['device' => null]);
+
+        $vehicleChoices = [];
+        foreach ($vehicles as $vehicle) {
+            $vehicleChoices[$vehicle->getId()] = $vehicle->getMake() . ', ' . $vehicle->getModel() . ', ' . $vehicle->getYear();
+        }
+
+        return array_flip($vehicleChoices);
+    }
 }
