@@ -27,14 +27,14 @@ class Vehicle
     #[ORM\Column(length: 255)]
     private ?string $year = null;
 
-    #[ORM\OneToOne(mappedBy: 'vehicle', cascade: ['persist', 'remove'])]
-    private ?Device $device = null;
-
     #[ORM\OneToMany(targetEntity: Speed::class, mappedBy: 'vehicle', orphanRemoval: true)]
     private Collection $speeds;
 
     #[ORM\OneToMany(targetEntity: Rpm::class, mappedBy: 'vehicle')]
     private Collection $rpms;
+
+    #[ORM\OneToOne(inversedBy: 'vehicle', cascade: ['persist', 'remove'])]
+    private ?device $device = null;
 
     public function __construct()
     {
@@ -95,28 +95,6 @@ class Vehicle
         return $this;
     }
 
-    public function getDevice(): ?Device
-    {
-        return $this->device;
-    }
-
-    public function setDevice(?Device $device): static
-    {
-        // unset the owning side of the relation if necessary
-        if ($device === null && $this->device !== null) {
-            $this->device->setVehicle(null);
-        }
-
-        // set the owning side of the relation if necessary
-        if ($device !== null && $device->getVehicle() !== $this) {
-            $device->setVehicle($this);
-        }
-
-        $this->device = $device;
-
-        return $this;
-    }
-
     /**
      * @return Collection<int, Speed>
      */
@@ -173,6 +151,18 @@ class Vehicle
                 $rpm->setVehicle(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getDevice(): ?device
+    {
+        return $this->device;
+    }
+
+    public function setDevice(?device $device): static
+    {
+        $this->device = $device;
 
         return $this;
     }

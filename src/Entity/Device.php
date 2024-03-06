@@ -19,7 +19,7 @@ class Device
     #[ORM\Column(length: 255)]
     private ?string $AuthenticationToken = null;
 
-    #[ORM\OneToOne(inversedBy: 'device', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(mappedBy: 'device', cascade: ['persist', 'remove'])]
     private ?Vehicle $vehicle = null;
 
     public function getId(): ?int
@@ -58,6 +58,16 @@ class Device
 
     public function setVehicle(?Vehicle $vehicle): static
     {
+        // unset the owning side of the relation if necessary
+        if ($vehicle === null && $this->vehicle !== null) {
+            $this->vehicle->setDevice(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($vehicle !== null && $vehicle->getDevice() !== $this) {
+            $vehicle->setDevice($this);
+        }
+
         $this->vehicle = $vehicle;
 
         return $this;

@@ -36,30 +36,24 @@
         <div class="row">
             <div class="col">
                 <h1>Prideti automobilius</h1>
-                <form method="POST">
-                    <select name="type" class="form-select" aria-label="Type of vehicle" required>
-                        <option disabled selected>Choose your vehicle type</option>
-                        <option value="car">Car</option>
-                        <option value="motorcycle">Motorcycle</option>
-                        <option value="van">Van</option>
-                    </select>
-                    <hr>
-                    <div class="form-floating mb-3">
-                        <input name="make" type="text" class="form-control" id="makeInput" placeholder="Vehicle make" required>
-                        <label for="makeInput" style="color: black;">Vehicle make</label>
-                    </div>
-                    <hr>
-                    <div class="form-floating mb-3">
-                        <input name="model" type="text" class="form-control" id="modelInput" placeholder="Vehicle model" required>
-                        <label for="modelInput" style="color: black;">Vehicle model</label>
-                    </div>
-                    <hr>
-                    <div class="form-floating mb-3">
-                        <input name="year" type="number" min="1900" max="2099" step="1" id="year" class="form-control" required>
-                        <label for="year" class="form-label" style="color: black;">Make year</label>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Add</button>
-                </form>
+                {{ form_start(form) }}
+                    {{ form_widget(form.type) }}
+                <hr>
+                <div class="form-floating mb-3">
+                    {{ form_widget(form.make) }}
+                    {{ form_label(form.make) }}
+                </div>
+                <hr>
+                <div class="form-floating mb-3">
+                    {{ form_widget(form.model) }}
+                    {{ form_label(form.model) }}
+                </div>
+                <hr>
+                <div class="form-floating mb-3">
+                    {{ form_widget(form.year) }}
+                    {{ form_label(form.year) }}
+                </div>
+                {{ form_end(form) }}
             </div>
         </div>
     </div>

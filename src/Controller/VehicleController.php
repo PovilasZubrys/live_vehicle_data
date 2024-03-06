@@ -5,9 +5,14 @@ namespace App\Controller;
 use App\Entity\Rpm;
 use App\Entity\Speed;
 use App\Entity\Vehicle;
+use App\Form\VehicleType;
 use App\Model\VehicleModel;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -16,20 +21,25 @@ use Symfony\UX\Chartjs\Model\Chart;
 
 class VehicleController extends AbstractController
 {
+    private object $em;
+
     public function __construct(EntityManagerInterface $em)
     {
         $this->em = $em;
     }
 
     #[Route('/vehicles', name: 'app_vehicles')]
-    public function index(Request $request, VehicleModel $vehicle): Response
+    public function index(Request $request): Response
     {
-        if ($request->isMethod('POST')) {
-            if ($vehicle->processNewVehicle($request->request->all())) {
-                $this->addFlash('success', 'Vehicle added successfully!');
-            } else {
-                $this->addFlash('warning', 'We were not able to add the vehicle :(');
-            }
+        $vehicle = new Vehicle();
+
+        $form = $this->createForm(VehicleType::class, $vehicle);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->em->persist($vehicle);
+            $this->em->flush();
+
             return $this->redirectToRoute('app_vehicles');
         }
 
@@ -37,7 +47,8 @@ class VehicleController extends AbstractController
 
         return $this->render('vehicle/index.html.twig', [
             'controller_name' => 'VehicleController',
-            'vehicles' => $vehicles
+            'vehicles' => $vehicles,
+            'form' => $form
         ]);
     }
 
@@ -117,8 +128,12 @@ class VehicleController extends AbstractController
     }
 
     #[Route('/get_vehicle_data/{dataType}/{id}', name: 'app_get_vehicle_data')]
-    public function getData(VehicleModel $vehicleModel, $dataType, $id): Response
+    public function getData(VehicleModel $vehicleModel,Request $request, $dataType, $id): Response
     {
+        if (!$request->isXmlHttpRequest()) {
+            return $this->redirectToRoute('app_vehicles');
+        }
+
         return $this->json($vehicleModel->getVehicleData($id,$dataType));
     }
 }
