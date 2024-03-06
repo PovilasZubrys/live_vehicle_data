@@ -1,12 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello VehicleController!{% endblock %}
+{% block title %}Vehicles{% endblock %}
 
 {% block body %}
     <div class="container">
         <div class="row">
             <div class="col">
-                <h1>Automobiliai</h1>
+                <h1>Vehicles</h1>
                 <table class="table table-hover table-dark">
                     <thead>
                         <tr>
@@ -35,7 +35,7 @@
         </div>
         <div class="row">
             <div class="col">
-                <h1>Prideti automobilius</h1>
+                <h1>Add vehicles</h1>
                 {{ form_start(form) }}
                     {{ form_widget(form.type) }}
                 <hr>
