@@ -20,7 +20,7 @@ class Speed
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $date = null;
 
-    #[ORM\ManyToOne(inversedBy: 'speeds')]
+    #[ORM\ManyToOne(targetEntity: Vehicle::class, inversedBy: 'speeds')]
     #[ORM\JoinColumn(nullable: false)]
     private ?vehicle $vehicle = null;
 
