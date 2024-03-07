@@ -33,7 +33,7 @@ class Vehicle
     #[ORM\OneToMany(targetEntity: Rpm::class, mappedBy: 'vehicle')]
     private Collection $rpms;
 
-    #[ORM\OneToOne(inversedBy: 'vehicle', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(targetEntity: Device::class, inversedBy: 'vehicle', cascade: ['persist', 'remove'])]
     private ?device $device = null;
 
     public function __construct()
