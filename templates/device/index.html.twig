@@ -41,7 +41,9 @@
                         {{ form_label(form.authentication_token) }}
                     </div>
                     <hr>
+                {% if form.vehicle is defined %}
                     {{ form_widget(form.vehicle) }}
+                {% endif %}
                 {{ form_end(form) }}
             </div>
         </div>

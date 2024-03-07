@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Entity\Device;
 use App\Entity\Vehicle;
 use App\Form\DeviceType;
-use App\Form\VehicleType;
 use App\Model\DeviceModel;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -29,20 +28,27 @@ class DeviceController extends AbstractController
         $vehicleChoices = $deviceModel->getVehicleChoices();
         $device = new Device();
 
-        $form = $this->createForm(DeviceType::class, $device)
-            ->add('vehicle', ChoiceType::class, [
-                'choices' => $vehicleChoices,
-                'attr' => ['class' => 'form-select'],
-                'mapped' => false
-            ]
-        );
+        if (empty($vehicleChoices)) {
+            $this->addFlash('warning', "There are not available vehicles. You won't be able to assign vehicle to the device. Please add vehicle.");
+            $form = $this->createForm(DeviceType::class, $device);
+        } else {
+            $form = $this->createForm(DeviceType::class, $device)
+                ->add('vehicle', ChoiceType::class, [
+                        'choices' => $vehicleChoices,
+                        'attr' => ['class' => 'form-select'],
+                        'mapped' => false
+                    ]
+                );
+        }
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $vehicle = $this->em->getRepository(Vehicle::class)->findOneBy(['id' => $form->get('vehicle')->getData()]);
-            $vehicle->setDevice($device);
+            if ($form->get('vehicle')->getData()) {
+                $vehicle = $this->em->getRepository(Vehicle::class)->findOneBy(['id' => $form->get('vehicle')->getData()]);
+                $vehicle->setDevice($device);
+                $this->em->persist($vehicle);
+            }
             $this->em->persist($device);
-            $this->em->persist($vehicle);
             $this->em->flush();
 
             return $this->redirectToRoute('app_device');
