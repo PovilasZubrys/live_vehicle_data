@@ -20,7 +20,7 @@ class Rpm
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $date = null;
 
-    #[ORM\ManyToOne(inversedBy: 'rpms')]
+    #[ORM\ManyToOne(targetEntity: Vehicle::class, inversedBy: 'rpms')]
     #[ORM\JoinColumn(nullable: false)]
     private ?vehicle $vehicle = null;
 
