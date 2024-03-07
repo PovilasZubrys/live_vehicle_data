@@ -37,7 +37,6 @@ export default class extends Controller {
             xhr.open("GET", url, true);
             xhr.onreadystatechange = function () {
                 if (this.readyState == 4 && this.status == 200) {
-                    console.log(this.responseText)
                     addData(event.detail.chart, this.responseText, this.responseText)
                     removeData(event.detail.chart)
                 }
@@ -45,7 +44,7 @@ export default class extends Controller {
 
             xhr.send();
 
-            setTimeout(getSpeed, 500)
+            setTimeout(getSpeed, 1000)
         }
         getSpeed(vehicleId, dataType)
     }
