@@ -130,10 +130,6 @@ class VehicleController extends AbstractController
     #[Route('/get_vehicle_data/{dataType}/{id}', name: 'app_get_vehicle_data')]
     public function getData(VehicleModel $vehicleModel,Request $request, $dataType, $id): Response
     {
-        if ($_ENV['APP_ENV'] == 'prod' && !$request->isXmlHttpRequest()) {
-            return $this->redirectToRoute('app_vehicles');
-        }
-
         return $this->json($vehicleModel->getVehicleData($id,$dataType));
     }
 }
