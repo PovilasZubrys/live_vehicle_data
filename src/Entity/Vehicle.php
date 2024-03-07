@@ -33,8 +33,8 @@ class Vehicle
     #[ORM\OneToMany(targetEntity: Rpm::class, mappedBy: 'vehicle')]
     private Collection $rpms;
 
-    #[ORM\OneToOne(targetEntity: Device::class, inversedBy: 'vehicle', cascade: ['persist', 'remove'])]
-    private ?device $device = null;
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    private ?Device $device = null;
 
     public function __construct()
     {
@@ -155,12 +155,12 @@ class Vehicle
         return $this;
     }
 
-    public function getDevice(): ?device
+    public function getDevice(): ?Device
     {
         return $this->device;
     }
 
-    public function setDevice(?device $device): static
+    public function setDevice(?Device $device): static
     {
         $this->device = $device;
 
