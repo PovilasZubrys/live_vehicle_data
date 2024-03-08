@@ -11,22 +11,23 @@
             {% endblock %}
         {% endblock %}
     </head>
+    {% if app.user %}
     <header>
         {% include 'navbar.html.twig' %}
     </header>
+    {% endif %}
     <body>
-        <div class="container">
-            <div class="row">
-                {% for type, flashMessages in app.session.flashbag.all %}
-                    {% for message in flashMessages %}
+        {% for type, flashMessages in app.session.flashbag.all %}
+            {% for message in flashMessages %}
+                <div class="container">
+                    <div class="row">
                         <div class="alert alert-{{ type }} alert-dismissible fade show" role="alert"> {{ message }}
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
-                    {% endfor %}
-                {% endfor %}
-
-            </div>
-        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endfor %}
         {% block body %}{% endblock %}
     </body>
 </html>
