@@ -11,10 +11,11 @@
                     <thead>
                         <tr>
                             <th scope="col">id</th>
-                            <th scope="col">Type</th>
                             <th scope="col">Make</th>
                             <th scope="col">Model</th>
                             <th scope="col">Year</th>
+                            <th scope="col">Type</th>
+                            <th scope="col"></th>
                             <th scope="col">Actions</th>
                         </tr>
                     </thead>
@@ -22,11 +23,20 @@
                     {% for vehicle in vehicles  %}
                         <tr>
                             <th scope="row">{{ vehicle.id }}</th>
-                            <td>{{ vehicle.type }}</td>
                             <td>{{ vehicle.make }}</td>
                             <td>{{ vehicle.model }}</td>
                             <td>{{ vehicle.year }}</td>
-                            <td>Some actions</td>
+                            <td>{{ vehicle.type }}</td>
+                            <td>
+                                {% if vehicle.device is null %}
+                                    <i title="No device assigned to this vehicle" class="bi bi-exclamation-triangle-fill"></i>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if vehicle.device is not null %}
+                                    <a style="cursor: pointer; color: inherit" href="{{ path('app_track_vehicles', {'id': vehicle.id}) }}" class="bi bi-activity" title="Check {{ vehicle.make }}, {{ vehicle.model }} data"></a>
+                                {% endif %}
+                            </td>
                         </tr>
                     {% endfor %}
                     </tbody>
