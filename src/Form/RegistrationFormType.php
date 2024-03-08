@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -17,9 +18,26 @@ class RegistrationFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('email')
+            ->add('email', EmailType::class, [
+                'attr' => [
+                    'class' => 'form-control',
+                    'placeholder' => 'Email',
+                ],
+                'label' => 'Email',
+                'label_attr' => [
+                    'style' => 'color: black'
+                ]
+            ])
             ->add('agreeTerms', CheckboxType::class, [
-                                'mapped' => false,
+                'mapped' => false,
+                'attr' => [
+                    'class' => 'form-check-input',
+                    'placeholder' => 'Agree to our terms'
+                ],
+                'label' => 'Agree to our terms',
+                'label_attr' => [
+                    'class' => 'form-check-label'
+                ],
                 'constraints' => [
                     new IsTrue([
                         'message' => 'You should agree to our terms.',
@@ -30,7 +48,15 @@ class RegistrationFormType extends AbstractType
                                 // instead of being set onto the object directly,
                 // this is read and encoded in the controller
                 'mapped' => false,
-                'attr' => ['autocomplete' => 'new-password'],
+                'attr' => [
+                    'class' => 'form-control',
+                    'placeholder' => 'Password',
+                    'autocomplete' => 'new-password'
+                ],
+                'label' => 'Password',
+                'label_attr' => [
+                    'style' => 'color: black'
+                ],
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Please enter a password',
