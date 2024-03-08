@@ -60,22 +60,19 @@ class VehicleController extends AbstractController
         $speedResults = $this->em->getRepository(Speed::class)->findBy(['vehicle' => $id], ['id' => 'DESC'], 50);
         $rpmResults = $this->em->getRepository(Rpm::class)->findBy(['vehicle' => $id], ['id' => 'DESC'], 50);
 
-        $speedLabels = [];
-        $speedData = [];
-
+        $speed = [];
         foreach ($speedResults as $value) {
-            $speedLabels[] = (int) $value->getValue();
-            $speedData[] = (int) $value->getValue();
+            $speed[] = (int) $value->getValue();
         }
 
         $speedChart->setData([
-            'labels' => $speedLabels,
+            'labels' => $speed,
             'datasets' => [
                 [
                     'label' => 'Speed',
                     'backgroundColor' => 'rgb(255, 99, 132)',
                     'borderColor' => 'rgb(255, 99, 132)',
-                    'data' => $speedData,
+                    'data' => $speed,
                     'tension' => 0.4
                 ]
             ]
@@ -90,22 +87,19 @@ class VehicleController extends AbstractController
 
         $rpmChart = $chartBuilder->createChart(Chart::TYPE_LINE);
 
-        $rpmLabels = [];
-        $rpmData = [];
-
+        $rpm = [];
         foreach ($rpmResults as $value) {
-            $rpmLabels[] = (int) $value->getValue();
-            $rpmData[] = (int) $value->getValue();
+            $rpm[] = (int) $value->getValue();
         }
 
         $rpmChart->setData([
-            'labels' => $rpmLabels,
+            'labels' => $rpm,
             'datasets' => [
                 [
                     'label' => 'Rpm',
                     'backgroundColor' => 'rgb(255, 99, 132)',
                     'borderColor' => 'rgb(255, 99, 132)',
-                    'data' => $rpmData,
+                    'data' => $rpm,
                     'tension' => 0.4
                 ]
             ]
@@ -123,6 +117,8 @@ class VehicleController extends AbstractController
             'controller_name' => 'VehicleController',
             'speedChart' => $speedChart,
             'rpmChart' => $rpmChart,
+            'current_speed' => end($speed),
+            'current_rpm' => end($rpm),
             'vehicle_id' => $id
         ]);
     }

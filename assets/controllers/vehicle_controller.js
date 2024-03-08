@@ -30,7 +30,11 @@ export default class extends Controller {
             chart.update();
         }
 
-        function getSpeed()
+        function updateData(data, dataType) {
+            document.getElementById(dataType).innerHTML = data;
+        }
+
+        function getData()
         {
             let xhr = new XMLHttpRequest();
             let url = 'http://' + window.location.host + '/get_vehicle_data/' + dataType + '/' + vehicleId;
@@ -39,13 +43,15 @@ export default class extends Controller {
                 if (this.readyState == 4 && this.status == 200) {
                     addData(event.detail.chart, this.responseText, this.responseText)
                     removeData(event.detail.chart)
+                    updateData(this.responseText, dataType)
                 }
             }
 
             xhr.send();
 
-            setTimeout(getSpeed, 1000)
+            setTimeout(getData, 1000)
         }
-        getSpeed(vehicleId, dataType)
+
+        getData(vehicleId, dataType)
     }
 }
