@@ -11,15 +11,18 @@ export default class extends Controller {
     }
 
     _onConnect(event) {
-        let vehicleId = event.target.dataset.vehicleId
         let dataType= event.target.dataset.dataType
 
-        function addData(chart, label, newData) {
-            chart.data.labels.push(label);
+        function addData(chart, newData) {
+            chart.data.labels.push(newData);
             chart.data.datasets.forEach((dataset) => {
                 dataset.data.push(newData);
             });
             chart.update();
+        }
+
+        function updateData(data, dataType) {
+            document.getElementById(dataType).innerHTML = data[dataType]
         }
 
         function removeData(chart) {
@@ -30,28 +33,14 @@ export default class extends Controller {
             chart.update();
         }
 
-        function updateData(data, dataType) {
-            document.getElementById(dataType).innerHTML = data;
+        var element = document.getElementById(dataType).innerHTML;
+        const url = JSON.parse(document.getElementById('mercure-url').textContent)
+        const eventSource = new EventSource(url)
+        eventSource.onmessage = (mercureEvent) => {
+            let data = JSON.parse(mercureEvent.data)
+            addData(event.detail.chart, data[dataType])
+            updateData(data, dataType)
+            removeData(event.detail.chart)
         }
-
-        function getData()
-        {
-            let xhr = new XMLHttpRequest();
-            let url = 'http://' + window.location.host + '/get_vehicle_data/' + dataType + '/' + vehicleId;
-            xhr.open("GET", url, true);
-            xhr.onreadystatechange = function () {
-                if (this.readyState == 4 && this.status == 200) {
-                    addData(event.detail.chart, this.responseText, this.responseText)
-                    removeData(event.detail.chart)
-                    updateData(this.responseText, dataType)
-                }
-            }
-
-            xhr.send();
-
-            setTimeout(getData, 1000)
-        }
-
-        getData(vehicleId, dataType)
     }
 }

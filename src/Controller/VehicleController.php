@@ -15,6 +15,8 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mercure\HubInterface;
+use Symfony\Component\Mercure\Update;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\UX\Chartjs\Builder\ChartBuilderInterface;
 use Symfony\UX\Chartjs\Model\Chart;
@@ -123,9 +125,22 @@ class VehicleController extends AbstractController
         ]);
     }
 
-    #[Route('/get_vehicle_data/{dataType}/{id}', name: 'app_get_vehicle_data')]
-    public function getData(VehicleModel $vehicleModel, $dataType, $id): Response
+    #[Route('/track_vehicle/publish/{id}', name: 'app_track_vehicle_publish')]
+    public function publish(EntityManagerInterface $em, HubInterface $hub, $id): Response
     {
-        return $this->json($vehicleModel->getVehicleData($id,$dataType));
+        $speed = $em->getRepository(Speed::class)->findOneBy(['vehicle' => $id], ['id' => 'DESC']);
+        $rpm = $em->getRepository(Rpm::class)->findOneBy(['vehicle' => $id], ['id' => 'DESC']);
+        $update = new Update(
+            '/vehicle_data',
+            json_encode(
+                [
+                    'speed' => $speed->getValue(),
+                    'rpm' => $rpm->getValue()
+                ])
+        );
+
+        $hub->publish($update);
+
+        return $this->json('done');
     }
 }
