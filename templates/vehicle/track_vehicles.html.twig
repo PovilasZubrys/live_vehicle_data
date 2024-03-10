@@ -23,7 +23,7 @@
                 {{ render_chart(speedChart, {'data-controller': 'vehicle', 'data-vehicle-id':  vehicle_id, 'data-data-type' : 'speed'}) }}
             </div>
             <div class="col-6">
-                {{ render_chart(rpmChart, {'data-controller': 'vehicle', 'data-vehicle-id':  vehicle_id, 'data-data-type': 'rpm', 'data-clubs-my-value': mercure(['/vehicle_data']) | escape('js') }) }}
+                {{ render_chart(rpmChart, {'data-controller': 'vehicle', 'data-vehicle-id':  vehicle_id, 'data-data-type': 'rpm'}) }}
             </div>
         </div>
     </div>

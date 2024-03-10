@@ -1,13 +1,18 @@
 import { Controller } from '@hotwired/stimulus';
 
+let mercureEventSource = null;
+
 export default class extends Controller {
     connect() {
         this.element.addEventListener('chartjs:connect', this._onConnect);
+        mercureEventSource = new EventSource(JSON.parse(document.getElementById('mercure-url').textContent))
     }
 
     disconnect() {
         // You should always remove listeners when the controller is disconnected to avoid side effects
         this.element.removeEventListener('chartjs:connect', this._onConnect);
+        mercureEventSource && mercureEventSource.close()
+        mercureEventSource = null
     }
 
     _onConnect(event) {
@@ -33,10 +38,11 @@ export default class extends Controller {
             chart.update();
         }
 
-        var element = document.getElementById(dataType).innerHTML;
-        const url = JSON.parse(document.getElementById('mercure-url').textContent)
-        const eventSource = new EventSource(url)
-        eventSource.onmessage = (mercureEvent) => {
+        mercureEventSource.onmessage = (mercureEvent) => {
+            if (mercureEventSource == null) {
+                return;
+            }
+
             let data = JSON.parse(mercureEvent.data)
             if (data[dataType]) {
                 addData(event.detail.chart, data[dataType])
