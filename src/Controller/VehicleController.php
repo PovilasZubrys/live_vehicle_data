@@ -6,13 +6,8 @@ use App\Entity\Rpm;
 use App\Entity\Speed;
 use App\Entity\Vehicle;
 use App\Form\VehicleType;
-use App\Model\VehicleModel;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\NumberType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mercure\HubInterface;
@@ -141,6 +136,9 @@ class VehicleController extends AbstractController
 
         $hub->publish($update);
 
-        return $this->json('done');
+        return $this->render('home_page/index.html.twig', [
+            'controller_name' => 'VehicleController',
+
+        ]);
     }
 }
