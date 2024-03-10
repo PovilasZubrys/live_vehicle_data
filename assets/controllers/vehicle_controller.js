@@ -38,9 +38,11 @@ export default class extends Controller {
         const eventSource = new EventSource(url)
         eventSource.onmessage = (mercureEvent) => {
             let data = JSON.parse(mercureEvent.data)
-            addData(event.detail.chart, data[dataType])
-            updateData(data, dataType)
-            removeData(event.detail.chart)
+            if (data[dataType]) {
+                addData(event.detail.chart, data[dataType])
+                updateData(data, dataType)
+                removeData(event.detail.chart)
+            }
         }
     }
 }
