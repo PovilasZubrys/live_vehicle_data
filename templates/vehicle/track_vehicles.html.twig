@@ -4,7 +4,7 @@
 
 {% block body %}
     <script type="application/json" id="mercure-url">
-        {{ mercure('/vehicle_data')|json_encode(constant('JSON_UNESCAPED_SLASHES') b-or constant('JSON_HEX_TAG'))|raw }}
+        {{ mercure('/vehicle_data/' ~ vehicle_id)|json_encode(constant('JSON_UNESCAPED_SLASHES') b-or constant('JSON_HEX_TAG'))|raw }}
     </script>
     <div class="container">
         <div class="row">
