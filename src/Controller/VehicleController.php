@@ -30,7 +30,6 @@ class VehicleController extends AbstractController
     {
         $vehicle = new Vehicle();
         $form = $this->createForm(VehicleType::class, $vehicle);
-
         $user = $this->getUser();
 
         $form->handleRequest($request);

@@ -23,23 +23,11 @@ class DeviceController extends AbstractController
     }
 
     #[Route('/device', name: 'app_device')]
-    public function index(Request $request, DeviceModel $deviceModel): Response
+    public function index(Request $request): Response
     {
-        $vehicleChoices = $deviceModel->getVehicleChoices();
         $device = new Device();
 
-        if (empty($vehicles)) {
-            $this->addFlash('warning', "There are no available vehicles. You won't be able to assign vehicle to the device. Please add vehicle.");
-            $form = $this->createForm(DeviceType::class, $device);
-        } else {
-            $form = $this->createForm(DeviceType::class, $device)
-                ->add('vehicle', ChoiceType::class, [
-                        'choices' => $vehicles,
-                        'attr' => ['class' => 'form-select'],
-                        'mapped' => false
-                    ]
-                );
-        }
+        $form = $this->createForm(DeviceType::class, $device);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {

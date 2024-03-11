@@ -37,6 +37,9 @@ class Vehicle
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    private ?Device $device = null;
+
     public function __construct()
     {
         $this->speeds = new ArrayCollection();
@@ -164,6 +167,18 @@ class Vehicle
     public function setUser(?User $user): static
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getDevice(): ?Device
+    {
+        return $this->device;
+    }
+
+    public function setDevice(?Device $device): static
+    {
+        $this->device = $device;
 
         return $this;
     }

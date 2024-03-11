@@ -39,7 +39,7 @@ class DeviceModel
 
     public function getVehicleChoices()
     {
-        $vehicles = $this->em->getRepository(Vehicle::class)->findOneBy(['id' => 1]);
+        $vehicles = $this->em->getRepository(Vehicle::class)->findBy(['device' => null]);
         $vehicleChoices = [];
             foreach ($vehicles as $vehicle) {
                 if ($vehicle->getDevice() == null) {
