@@ -19,6 +19,12 @@ class Device
     #[ORM\Column(length: 255)]
     private ?string $authentication_token = null;
 
+    #[ORM\ManyToOne(inversedBy: 'devices')]
+    private ?User $user = null;
+
+    #[ORM\OneToOne(inversedBy: 'device', cascade: ['persist', 'remove'])]
+    private ?Vehicle $Vehicle = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -44,6 +50,30 @@ class Device
     public function setAuthenticationToken(string $authentication_token): static
     {
         $this->authentication_token = $authentication_token;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    public function getVehicle(): ?Vehicle
+    {
+        return $this->Vehicle;
+    }
+
+    public function setVehicle(?Vehicle $Vehicle): static
+    {
+        $this->Vehicle = $Vehicle;
 
         return $this;
     }

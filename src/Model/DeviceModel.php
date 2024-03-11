@@ -42,8 +42,11 @@ class DeviceModel
         $vehicles = $this->em->getRepository(Vehicle::class)->findBy(['device' => null]);
 
         $vehicleChoices = [];
-        foreach ($vehicles as $vehicle) {
-            $vehicleChoices[$vehicle->getId()] = $vehicle->getMake() . ', ' . $vehicle->getModel() . ', ' . $vehicle->getYear();
+            foreach ($vehicles as $vehicle) {
+                if ($vehicle->getDevice() == null) {
+                    $vehicleChoices[$vehicle->getId()] = $vehicle->getMake() . ', ' . $vehicle->getModel() . ', ' . $vehicle->getYear();
+                }
+
         }
 
         return array_flip($vehicleChoices);

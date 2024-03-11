@@ -35,6 +35,7 @@
                             <td>
                                 {% if vehicle.device is not null %}
                                     <a style="cursor: pointer; color: inherit" href="{{ path('app_track_vehicles', {'id': vehicle.id}) }}" class="bi bi-activity" title="Check {{ vehicle.make }}, {{ vehicle.model }} data"></a>
+                                    <a style="cursor: pointer; color: inherit" href="{{ path('app_delete_vehicles', {'id': vehicle.id}) }}" title="Delete vehicle" class="bi bi-trash"></a>
                                 {% endif %}
                             </td>
                         </tr>

@@ -20,7 +20,7 @@
                         <tr>
                             <th scope="row">{{ device.id }}</th>
                             <td>{{ device.name }}</td>
-                            <td>Some actions</td>
+                            <td><a style="cursor: pointer; color: inherit" href="{{ path('app_delete_device', {'id': device.id}) }}" title="Delete vehicle" class="bi bi-trash"></a></td>
                         </tr>
                     {% endfor %}
                     </tbody>
@@ -41,9 +41,10 @@
                         {{ form_label(form.authentication_token) }}
                     </div>
                     <hr>
-                {% if form.vehicle is defined %}
-                    {{ form_widget(form.vehicle) }}
-                {% endif %}
+                    <div class="form-floating mb-3">
+                        {{ form_widget(form.vehicle) }}
+                        {{ form_label(form.vehicle) }}
+                    </div>
                 {{ form_end(form) }}
             </div>
         </div>

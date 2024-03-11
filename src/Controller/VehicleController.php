@@ -51,13 +51,14 @@ class VehicleController extends AbstractController
         ]);
     }
 
-    #[Route('/vehicles/track_vehicle/{id}', name: 'app_track_vehicles')]
-    public function trackVehicle(ChartBuilderInterface $chartBuilder, $id): Response
+    #[Route('/vehicles/track/{id}', name: 'app_track_vehicles')]
+    public function track(ChartBuilderInterface $chartBuilder, $id): Response
     {
         if (empty($this->em->getRepository(Vehicle::class)->findOneBy(['id' => $id, 'user' => $this->getUser()]))) {
             $this->addFlash('warning', 'Vehicle not found.');
             return $this->redirectToRoute('app_vehicles');
         }
+
         $speedChart = $chartBuilder->createChart(Chart::TYPE_LINE);
 
         $speedResults = $this->em->getRepository(Speed::class)->findBy(['vehicle' => $id], ['id' => 'DESC'], 50);
@@ -122,7 +123,25 @@ class VehicleController extends AbstractController
             'rpmChart' => $rpmChart,
             'current_speed' => end($speed),
             'current_rpm' => end($rpm),
-            'vehicle_id' => $id
+            'mercure_url' => '/vehicle_data/' . $id
         ]);
+    }
+
+    #[Route('/vehicles/delete/{id}', name: 'app_delete_vehicles')]
+    public function delete($id): Response
+    {
+        $vehicle = $this->em->getRepository(Vehicle::class)->findOneBy(['id' => $id]);
+        $vehicleOwner = $vehicle->getUser();
+
+        if ($this->getUser()->getId() != $vehicleOwner->getId()) {
+            $this->addFlash('danger', 'Vehicle not found.');
+            return $this->redirectToRoute('app_vehicles');
+        }
+
+        $this->em->remove($vehicle);
+        $this->em->flush();
+
+        $this->addFlash('success', 'Vehicle deleted successfully.');
+        return $this->redirectToRoute('app_vehicles');
     }
 }
