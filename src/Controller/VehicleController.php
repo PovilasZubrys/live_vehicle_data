@@ -29,18 +29,20 @@ class VehicleController extends AbstractController
     public function index(Request $request): Response
     {
         $vehicle = new Vehicle();
-
         $form = $this->createForm(VehicleType::class, $vehicle);
+
+        $user = $this->getUser();
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $vehicle->setUser($user);
             $this->em->persist($vehicle);
             $this->em->flush();
 
             return $this->redirectToRoute('app_vehicles');
         }
 
-        $vehicles = $this->em->getRepository(Vehicle::class)->findAll();
+        $vehicles = $this->em->getRepository(Vehicle::class)->findBy(['user' => $user]);
 
         return $this->render('vehicle/index.html.twig', [
             'controller_name' => 'VehicleController',
@@ -49,9 +51,13 @@ class VehicleController extends AbstractController
         ]);
     }
 
-    #[Route('/track_vehicle/{id}', name: 'app_track_vehicles')]
+    #[Route('/vehicles/track_vehicle/{id}', name: 'app_track_vehicles')]
     public function trackVehicle(ChartBuilderInterface $chartBuilder, $id): Response
     {
+        if (empty($this->em->getRepository(Vehicle::class)->findOneBy(['id' => $id, 'user' => $this->getUser()]))) {
+            $this->addFlash('warning', 'Vehicle not found.');
+            return $this->redirectToRoute('app_vehicles');
+        }
         $speedChart = $chartBuilder->createChart(Chart::TYPE_LINE);
 
         $speedResults = $this->em->getRepository(Speed::class)->findBy(['vehicle' => $id], ['id' => 'DESC'], 50);
@@ -117,28 +123,6 @@ class VehicleController extends AbstractController
             'current_speed' => end($speed),
             'current_rpm' => end($rpm),
             'vehicle_id' => $id
-        ]);
-    }
-
-    #[Route('/track_vehicle/publish/{id}', name: 'app_track_vehicle_publish')]
-    public function publish(EntityManagerInterface $em, HubInterface $hub, $id): Response
-    {
-        $speed = $em->getRepository(Speed::class)->findOneBy(['vehicle' => $id], ['id' => 'DESC']);
-        $rpm = $em->getRepository(Rpm::class)->findOneBy(['vehicle' => $id], ['id' => 'DESC']);
-        $update = new Update(
-            '/vehicle_data',
-            json_encode(
-                [
-                    'speed' => $speed->getValue(),
-                    'rpm' => $rpm->getValue()
-                ])
-        );
-
-        $hub->publish($update);
-
-        return $this->render('home_page/index.html.twig', [
-            'controller_name' => 'VehicleController',
-
         ]);
     }
 }
