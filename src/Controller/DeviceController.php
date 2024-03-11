@@ -25,8 +25,8 @@ class DeviceController extends AbstractController
     #[Route('/device', name: 'app_device')]
     public function index(Request $request, DeviceModel $deviceModel): Response
     {
+        $vehicleChoices = $deviceModel->getVehicleChoices();
         $device = new Device();
-        $vehicles = $this->em->getRepository(Vehicle::class)->findAll();
 
         if (empty($vehicles)) {
             $this->addFlash('warning', "There are no available vehicles. You won't be able to assign vehicle to the device. Please add vehicle.");

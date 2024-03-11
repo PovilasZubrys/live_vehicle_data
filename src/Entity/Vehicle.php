@@ -37,9 +37,6 @@ class Vehicle
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
-    #[ORM\OneToOne(mappedBy: 'Vehicle', cascade: ['persist', 'remove'])]
-    private ?Device $device = null;
-
     public function __construct()
     {
         $this->speeds = new ArrayCollection();
@@ -167,28 +164,6 @@ class Vehicle
     public function setUser(?User $user): static
     {
         $this->user = $user;
-
-        return $this;
-    }
-
-    public function getDevice(): ?Device
-    {
-        return $this->device;
-    }
-
-    public function setDevice(?Device $device): static
-    {
-        // unset the owning side of the relation if necessary
-        if ($device === null && $this->device !== null) {
-            $this->device->setVehicle(null);
-        }
-
-        // set the owning side of the relation if necessary
-        if ($device !== null && $device->getVehicle() !== $this) {
-            $device->setVehicle($this);
-        }
-
-        $this->device = $device;
 
         return $this;
     }

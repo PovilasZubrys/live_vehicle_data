@@ -42,7 +42,7 @@ class VehicleController extends AbstractController
             return $this->redirectToRoute('app_vehicles');
         }
 
-        $vehicles = $this->em->getRepository(Vehicle::class)->findBy(['user' => $user]);
+        $vehicles = $this->em->getRepository(Vehicle::class)->findAll();
 
         return $this->render('vehicle/index.html.twig', [
             'controller_name' => 'VehicleController',
