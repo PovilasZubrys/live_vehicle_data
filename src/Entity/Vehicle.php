@@ -43,12 +43,16 @@ class Vehicle
     #[ORM\OneToMany(targetEntity: EngineLoad::class, mappedBy: 'vehicle')]
     private Collection $engineLoads;
 
+    #[ORM\OneToMany(targetEntity: CoolantTemp::class, mappedBy: 'vehicle')]
+    private Collection $coolantTemps;
+
     public function __construct()
     {
         $this->speeds = new ArrayCollection();
         $this->rpms = new ArrayCollection();
         $this->devices = new ArrayCollection();
         $this->engineLoads = new ArrayCollection();
+        $this->coolantTemps = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -230,6 +234,36 @@ class Vehicle
             // set the owning side to null (unless already changed)
             if ($engineLoad->getVehicle() === $this) {
                 $engineLoad->setVehicle(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, CoolantTemp>
+     */
+    public function getCoolantTemps(): Collection
+    {
+        return $this->coolantTemps;
+    }
+
+    public function addCoolantTemp(CoolantTemp $coolantTemp): static
+    {
+        if (!$this->coolantTemps->contains($coolantTemp)) {
+            $this->coolantTemps->add($coolantTemp);
+            $coolantTemp->setVehicle($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCoolantTemp(CoolantTemp $coolantTemp): static
+    {
+        if ($this->coolantTemps->removeElement($coolantTemp)) {
+            // set the owning side to null (unless already changed)
+            if ($coolantTemp->getVehicle() === $this) {
+                $coolantTemp->setVehicle(null);
             }
         }
 

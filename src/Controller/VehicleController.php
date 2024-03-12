@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\CoolantTemp;
 use App\Entity\Device;
 use App\Entity\EngineLoad;
 use App\Entity\Rpm;
@@ -62,12 +63,14 @@ class VehicleController extends AbstractController
         $speedChart = $vehicleModel->getChart(Speed::class, $id, 'Speed');
         $rpmChart = $vehicleModel->getChart(Rpm::class, $id, 'Rpm');
         $engineLoadChart = $vehicleModel->getChart(EngineLoad::class, $id, 'Engine load');
+        $coolantTempChart = $vehicleModel->getChart(CoolantTemp::class, $id, 'Coolant temp');
 
         return $this->render('vehicle/track_vehicles.html.twig', [
             'controller_name' => 'VehicleController',
             'speedChart' => $speedChart,
             'rpmChart' => $rpmChart,
             'engineLoadChart' => $engineLoadChart,
+            'coolantTempChart' => $coolantTempChart,
             'mercure_url' => '/vehicle_data/' . $id
         ]);
     }
