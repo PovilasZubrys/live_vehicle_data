@@ -6,6 +6,8 @@ use App\Entity\Rpm;
 use App\Entity\Speed;
 use App\Entity\Vehicle;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\UX\Chartjs\Builder\ChartBuilder;
+use Symfony\UX\Chartjs\Model\Chart;
 
 class VehicleModel
 {
@@ -16,16 +18,31 @@ class VehicleModel
         $this->em = $em;
     }
 
-    public function getFreeVehicles(): array
+    public function getChart($dataEntity, $vehicleId): object
     {
-        $vehicles = $this->em->getRepository(Vehicle::class)->findBy(['device' => null]);
+        $chartBuilder = new ChartBuilder();
+        $chart = $chartBuilder->createChart(Chart::TYPE_LINE);
 
-        $data = [];
-        foreach ($vehicles as $vehicle) {
-            $choiceOption = $vehicle->getMake() . ' ' . $vehicle->getModel() . ' ' . $vehicle->getYear() . "(Id: " . $vehicle->getId() .')';
-            $data['data'][$choiceOption] = $vehicle->getId();
+        $data = $this->em->getRepository($dataEntity)->findBy(['vehicle' => $vehicleId], ['id' => 'DESC'], 50);
+
+        $results = [];
+        foreach ($data as $result) {
+            $results[] = (int) $result->getValue();
         }
 
-        return $vehicles;
+        $chart->setData([
+            'labels' => $results,
+            'datasets' => [
+                [
+                    'label' => 'Speed',
+                    'backgroundColor' => 'rgb(255, 99, 132)',
+                    'borderColor' => 'rgb(255, 99, 132)',
+                    'data' => $results,
+                    'tension' => 0.4
+                ]
+            ]
+        ]);
+
+        return $chart;
     }
 }
