@@ -135,7 +135,10 @@ class VehicleController extends AbstractController
             $this->addFlash('danger', 'Vehicle not found.');
             return $this->redirectToRoute('app_vehicles');
         }
+        $device = $this->em->getRepository(Device::class)->findOneBy(['vehicle' => $vehicle]);
+        $device->setVehicle(null);
 
+        $this->em->persist($device);
         $this->em->remove($vehicle);
         $this->em->flush();
 
