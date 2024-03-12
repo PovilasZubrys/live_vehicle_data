@@ -15,7 +15,8 @@
                             <th scope="col">Model</th>
                             <th scope="col">Year</th>
                             <th scope="col">Type</th>
-                            <th scope="col"></th>
+                            <th scope="col">Current device</th>
+                            <th scope="col">Notification</th>
                             <th scope="col">Actions</th>
                         </tr>
                     </thead>
@@ -28,12 +29,16 @@
                             <td>{{ vehicle.year }}</td>
                             <td>{{ vehicle.type }}</td>
                             <td>
+                                {% for device in vehicle.devices %}
+                                    {{ device.name }} (ID: {{ device.id }})
+                                {% endfor %}
+                            </td>
+                            <td>
                                 {% if devices is empty and vehicle.devices is empty %}
                                     <i title="There are no available devices" class="bi bi-exclamation-triangle-fill"></i>
                                 {% elseif vehicle.devices is empty %}
                                     <i title="No device assigned to this vehicle" class="bi bi-exclamation-triangle-fill"></i>
                                 {% endif %}
-
                             </td>
                             <td>
                                 {% if vehicle.devices is not empty %}

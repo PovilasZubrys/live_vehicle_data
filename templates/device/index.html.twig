@@ -12,6 +12,7 @@
                     <tr>
                         <th scope="col">id</th>
                         <th scope="col">Name</th>
+                        <th scope="col">Current active vehicle</th>
                         <th scope="col">Actions</th>
                     </tr>
                     </thead>
@@ -20,6 +21,11 @@
                         <tr>
                             <th scope="row">{{ device.id }}</th>
                             <td>{{ device.name }}</td>
+                            <td>
+                                {% if device.vehicle is not empty %}
+                                    {{ device.vehicle.make }} {{ device.vehicle.model }} {{ device.vehicle.year }} (ID:{{ device.vehicle.id }})
+                                {% endif %}
+                            </td>
                             <td><a style="cursor: pointer; color: inherit" href="{{ path('app_delete_device', {'id': device.id}) }}" title="Delete vehicle" class="bi bi-trash"></a></td>
                         </tr>
                     {% endfor %}
