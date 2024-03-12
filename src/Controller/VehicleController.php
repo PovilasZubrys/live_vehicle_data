@@ -58,8 +58,8 @@ class VehicleController extends AbstractController
             return $this->redirectToRoute('app_vehicles');
         }
 
-        $speedChart = $vehicleModel->getChart(Speed::class, $id);
-        $rpmChart = $vehicleModel->getChart(Rpm::class, $id);
+        $speedChart = $vehicleModel->getChart(Speed::class, $id, 'Speed');
+        $rpmChart = $vehicleModel->getChart(Rpm::class, $id, 'Rpm');
 
         return $this->render('vehicle/track_vehicles.html.twig', [
             'controller_name' => 'VehicleController',

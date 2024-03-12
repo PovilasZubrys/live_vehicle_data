@@ -18,7 +18,7 @@ class VehicleModel
         $this->em = $em;
     }
 
-    public function getChart($dataEntity, $vehicleId): object
+    public function getChart($dataEntity, $vehicleId, $label): object
     {
         $chartBuilder = new ChartBuilder();
         $chart = $chartBuilder->createChart(Chart::TYPE_LINE);
@@ -34,7 +34,7 @@ class VehicleModel
             'labels' => $results,
             'datasets' => [
                 [
-                    'label' => 'Speed',
+                    'label' => $label,
                     'backgroundColor' => 'rgb(255, 99, 132)',
                     'borderColor' => 'rgb(255, 99, 132)',
                     'data' => $results,
