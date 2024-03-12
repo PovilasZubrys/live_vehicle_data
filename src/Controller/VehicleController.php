@@ -2,11 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Device;
 use App\Entity\Rpm;
 use App\Entity\Speed;
 use App\Entity\Vehicle;
 use App\Form\VehicleType;
-use App\Repository\DeviceRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,11 +29,10 @@ class VehicleController extends AbstractController
     {
         $vehicle = new Vehicle();
         $form = $this->createForm(VehicleType::class, $vehicle);
-        $user = $this->getUser();
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $vehicle->setUser($user);
+            $vehicle->setUser($this->getUser());
             $this->em->persist($vehicle);
             $this->em->flush();
 
@@ -41,11 +40,12 @@ class VehicleController extends AbstractController
         }
 
         $vehicles = $this->em->getRepository(Vehicle::class)->findAll();
+        $devices = $this->em->getRepository(Device::class)->findBy(['vehicle' => null]);
 
         return $this->render('vehicle/index.html.twig', [
-            'controller_name' => 'VehicleController',
             'vehicles' => $vehicles,
-            'form' => $form
+            'form' => $form,
+            'devices' => $devices
         ]);
     }
 
@@ -140,6 +140,18 @@ class VehicleController extends AbstractController
         $this->em->flush();
 
         $this->addFlash('success', 'Vehicle deleted successfully.');
+        return $this->redirectToRoute('app_vehicles');
+    }
+
+    #[Route('/vehicles/assign/{id}/{deviceId}', name: 'app_assign_vehicles')]
+    public function assign($id, $deviceId): Response
+    {
+        $vehicle = $this->em->getRepository(Vehicle::class)->findOneBy(['id' => $id]);
+        $device = $this->em->getRepository(Device::class)->findOneBy(['id' => $deviceId]);
+        $device->setVehicle($vehicle);
+
+        $this->em->persist($device);
+        $this->em->flush();
         return $this->redirectToRoute('app_vehicles');
     }
 }
