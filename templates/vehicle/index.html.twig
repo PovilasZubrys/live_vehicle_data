@@ -28,12 +28,12 @@
                             <td>{{ vehicle.year }}</td>
                             <td>{{ vehicle.type }}</td>
                             <td>
-                                {% if vehicle.device is null %}
+                                {% if vehicle.devices is empty %}
                                     <i title="No device assigned to this vehicle" class="bi bi-exclamation-triangle-fill"></i>
                                 {% endif %}
                             </td>
                             <td>
-                                {% if vehicle.device is not null %}
+                                {% if vehicle.devices is not empty %}
                                     <a style="cursor: pointer; color: inherit" href="{{ path('app_track_vehicles', {'id': vehicle.id}) }}" class="bi bi-activity" title="Check {{ vehicle.make }}, {{ vehicle.model }} data"></a>
                                     <a style="cursor: pointer; color: inherit" href="{{ path('app_delete_vehicles', {'id': vehicle.id}) }}" title="Delete vehicle" class="bi bi-trash"></a>
                                 {% endif %}

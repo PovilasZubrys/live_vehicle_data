@@ -9,11 +9,6 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class VehicleModel
 {
-    const AVAILABLE_ENTITIES = [
-        'speed' => Speed::class,
-        'rpm' => Rpm::class
-    ];
-
     private object $em;
 
     public function __construct(EntityManagerInterface $em)
@@ -21,32 +16,16 @@ class VehicleModel
         $this->em = $em;
     }
 
-    public function processNewVehicle(array $data): bool
+    public function getFreeVehicles(): array
     {
-        $vehicle = new Vehicle();
+        $vehicles = $this->em->getRepository(Vehicle::class)->findBy(['device' => null]);
 
-        $vehicle
-            ->setType($data['type'])
-            ->setMake($data['make'])
-            ->setModel($data['model'])
-            ->setYear($data['year']);
-
-        try {
-            $this->em->persist($vehicle);
-            $this->em->flush();
-        } catch (\Exception $exception) {
-            return false;
+        $data = [];
+        foreach ($vehicles as $vehicle) {
+            $choiceOption = $vehicle->getMake() . ' ' . $vehicle->getModel() . ' ' . $vehicle->getYear() . "(Id: " . $vehicle->getId() .')';
+            $data['data'][$choiceOption] = $vehicle->getId();
         }
-        return true;
-    }
 
-    public function getVehicleData(int $id, string $dataType): int|null
-    {
-        $value = $this->em->getRepository(self::AVAILABLE_ENTITIES[$dataType])->findOneBy(['vehicle' => $id], ['id' => 'DESC']);
-
-        if (is_null($value)) {
-            return $value;
-        }
-        return $value->getValue();
+        return $vehicles;
     }
 }

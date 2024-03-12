@@ -37,13 +37,14 @@ class Vehicle
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
-    private ?Device $device = null;
+    #[ORM\OneToMany(targetEntity: Device::class, mappedBy: 'vehicle')]
+    private Collection $devices;
 
     public function __construct()
     {
         $this->speeds = new ArrayCollection();
         $this->rpms = new ArrayCollection();
+        $this->devices = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -171,14 +172,32 @@ class Vehicle
         return $this;
     }
 
-    public function getDevice(): ?Device
+    /**
+     * @return Collection<int, Device>
+     */
+    public function getDevices(): Collection
     {
-        return $this->device;
+        return $this->devices;
     }
 
-    public function setDevice(?Device $device): static
+    public function addDevice(Device $device): static
     {
-        $this->device = $device;
+        if (!$this->devices->contains($device)) {
+            $this->devices->add($device);
+            $device->setVehicle($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDevice(Device $device): static
+    {
+        if ($this->devices->removeElement($device)) {
+            // set the owning side to null (unless already changed)
+            if ($device->getVehicle() === $this) {
+                $device->setVehicle(null);
+            }
+        }
 
         return $this;
     }

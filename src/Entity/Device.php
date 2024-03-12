@@ -22,6 +22,8 @@ class Device
     #[ORM\ManyToOne(inversedBy: 'devices')]
     private ?User $user = null;
 
+    #[ORM\ManyToOne(inversedBy: 'devices')]
+    private ?Vehicle $vehicle = null;
     public function getId(): ?int
     {
         return $this->id;
@@ -59,6 +61,18 @@ class Device
     public function setUser(?User $user): static
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getVehicle(): ?Vehicle
+    {
+        return $this->vehicle;
+    }
+
+    public function setVehicle(?Vehicle $vehicle): static
+    {
+        $this->vehicle = $vehicle;
 
         return $this;
     }

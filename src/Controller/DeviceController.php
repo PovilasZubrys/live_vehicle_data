@@ -6,6 +6,7 @@ use App\Entity\Device;
 use App\Entity\Vehicle;
 use App\Form\DeviceType;
 use App\Model\DeviceModel;
+use App\Model\VehicleModel;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -28,12 +29,9 @@ class DeviceController extends AbstractController
         $device = new Device();
 
         $form = $this->createForm(DeviceType::class, $device);
-
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $device->setUser($this->getUser());
-            $device->setVehicle($form->get('vehicle')->getData());
-
             $this->em->persist($device);
             $this->em->flush();
 
