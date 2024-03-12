@@ -40,11 +40,15 @@ class Vehicle
     #[ORM\OneToMany(targetEntity: Device::class, mappedBy: 'vehicle')]
     private Collection $devices;
 
+    #[ORM\OneToMany(targetEntity: EngineLoad::class, mappedBy: 'vehicle')]
+    private Collection $engineLoads;
+
     public function __construct()
     {
         $this->speeds = new ArrayCollection();
         $this->rpms = new ArrayCollection();
         $this->devices = new ArrayCollection();
+        $this->engineLoads = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -196,6 +200,36 @@ class Vehicle
             // set the owning side to null (unless already changed)
             if ($device->getVehicle() === $this) {
                 $device->setVehicle(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, EngineLoad>
+     */
+    public function getEngineLoads(): Collection
+    {
+        return $this->engineLoads;
+    }
+
+    public function addEngineLoad(EngineLoad $engineLoad): static
+    {
+        if (!$this->engineLoads->contains($engineLoad)) {
+            $this->engineLoads->add($engineLoad);
+            $engineLoad->setVehicle($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEngineLoad(EngineLoad $engineLoad): static
+    {
+        if ($this->engineLoads->removeElement($engineLoad)) {
+            // set the owning side to null (unless already changed)
+            if ($engineLoad->getVehicle() === $this) {
+                $engineLoad->setVehicle(null);
             }
         }
 

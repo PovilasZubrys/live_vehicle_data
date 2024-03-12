@@ -26,6 +26,12 @@
                 {{ render_chart(rpmChart, {'data-controller': 'vehicle', 'data-data-type': 'rpm'}) }}
             </div>
         </div>
+        <div class="row">
+            <h3>Data chart</h3>
+            <div class="col-6">
+                {{ render_chart(engineLoadChart, {'data-controller': 'vehicle', 'data-data-type' : 'engine_load'}) }}
+            </div>
+        </div>
     </div>
 
 {% endblock %}
