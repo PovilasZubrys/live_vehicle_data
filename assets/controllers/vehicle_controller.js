@@ -6,6 +6,12 @@ export default class extends Controller {
     connect() {
         this.element.addEventListener('chartjs:connect', this._onConnect);
         mercureEventSource = new EventSource(JSON.parse(document.getElementById('mercure-url').textContent))
+        const myModal = document.getElementById('myModal')
+        const myInput = document.getElementById('myInput')
+
+        myModal.addEventListener('shown.bs.modal', () => {
+            myInput.focus()
+        })
     }
 
     disconnect() {

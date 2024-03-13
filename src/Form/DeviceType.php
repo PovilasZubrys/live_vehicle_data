@@ -26,9 +26,6 @@ class DeviceType extends AbstractType
                     'placeholder' => 'Device name',
                 ],
                 'label' => 'Device name',
-                'label_attr' => [
-                    'style' => 'color: black'
-                ]
             ])
             ->add('authentication_token', TextType::class, [
                 'attr' => [
@@ -36,9 +33,6 @@ class DeviceType extends AbstractType
                     'placeholder' => 'Device authentication token',
                 ],
                 'label' => 'Device authentication token',
-                'label_attr' => [
-                    'style' => 'color: black'
-                ]
             ])
             ->add('Save', SubmitType::class, [
                 'label' => 'Save device',

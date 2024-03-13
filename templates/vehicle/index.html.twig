@@ -43,7 +43,8 @@
                             <td>
                                 {% if vehicle.devices is not empty %}
                                     <a style="cursor: pointer; color: inherit" href="{{ path('app_track_vehicles', {'id': vehicle.id}) }}" class="bi bi-activity" title="Check {{ vehicle.make }}, {{ vehicle.model }} data"></a>
-                                    <a style="cursor: pointer; color: inherit" href="{{ path('app_delete_vehicles', {'id': vehicle.id}) }}" title="Delete vehicle" class="bi bi-trash"></a>
+                                    {% include 'delete_modal.html.twig' with {'entity': vehicle, 'action_path': 'app_delete_vehicles'}%}
+                                    <a style="cursor: pointer; color: inherit" type="button" title="Delete vehicle" data-bs-toggle="modal" data-bs-target="#staticBackdrop" class="bi bi-trash"></a>
                                 {% endif %}
                                 {% if vehicle.devices is empty and devices is not empty %}
                                     <div class="btn-group">

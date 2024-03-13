@@ -33,9 +33,6 @@ class VehicleType extends AbstractType
                     'placeholder' => 'Vehicle make',
                 ],
                 'label' => 'Vehicle make',
-                'label_attr' => [
-                    'style' => 'color: black'
-                ]
             ])
             ->add('model', TextType::class, [
                 'attr' => [
@@ -43,15 +40,9 @@ class VehicleType extends AbstractType
                     'placeholder' => 'Vehicle model',
                 ],
                 'label' => 'Vehicle model',
-                'label_attr' => [
-                    'style' => 'color: black'
-                ]
             ])
             ->add('year', NumberType::class, [
                 'label' => 'Vehicle year',
-                'label_attr' => [
-                    'style' => 'color: black'
-                ],
                 'attr' => [
                     'class' => 'form-control',
                     'placeholder' => 'Vehicle year',
