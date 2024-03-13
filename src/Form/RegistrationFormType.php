@@ -24,9 +24,6 @@ class RegistrationFormType extends AbstractType
                     'placeholder' => 'Email',
                 ],
                 'label' => 'Email',
-                'label_attr' => [
-                    'style' => 'color: black'
-                ]
             ])
             ->add('agreeTerms', CheckboxType::class, [
                 'mapped' => false,
@@ -54,9 +51,6 @@ class RegistrationFormType extends AbstractType
                     'autocomplete' => 'new-password'
                 ],
                 'label' => 'Password',
-                'label_attr' => [
-                    'style' => 'color: black'
-                ],
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Please enter a password',
