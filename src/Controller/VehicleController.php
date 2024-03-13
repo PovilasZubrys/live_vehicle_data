@@ -107,4 +107,15 @@ class VehicleController extends AbstractController
         $this->em->flush();
         return $this->redirectToRoute('app_vehicles');
     }
+
+    #[Route('/vehicles/unassign_device/{id}', name: 'app_unassign_devices')]
+    public function unassign($id): Response
+    {
+        $device = $this->em->getRepository(Device::class)->findOneBy(['id' => $id]);
+        $device->setVehicle(null);
+
+        $this->em->persist($device);
+        $this->em->flush();
+        return $this->redirectToRoute('app_vehicles');
+    }
 }
