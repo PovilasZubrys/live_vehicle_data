@@ -61,6 +61,6 @@ class DeviceController extends AbstractController
         $this->em->flush();
 
         $this->addFlash('success', 'Device deleted successfully.');
-        return $this->redirectToRoute('app_vehicles');
+        return $this->redirectToRoute('app_device');
     }
 }

@@ -1,13 +1,13 @@
 import { Controller } from '@hotwired/stimulus';
 
 let mercureEventSource = null;
+const myModal = document.getElementById('myModal')
+const myInput = document.getElementById('myInput')
 
 export default class extends Controller {
     connect() {
         this.element.addEventListener('chartjs:connect', this._onConnect);
         mercureEventSource = new EventSource(JSON.parse(document.getElementById('mercure-url').textContent))
-        const myModal = document.getElementById('myModal')
-        const myInput = document.getElementById('myInput')
 
         myModal.addEventListener('shown.bs.modal', () => {
             myInput.focus()
@@ -19,6 +19,10 @@ export default class extends Controller {
         this.element.removeEventListener('chartjs:connect', this._onConnect);
         mercureEventSource && mercureEventSource.close()
         mercureEventSource = null
+
+        myModal.removeEventListener('shown.bs.modal', () => {
+            myInput.focus()
+        })
     }
 
     _onConnect(event) {

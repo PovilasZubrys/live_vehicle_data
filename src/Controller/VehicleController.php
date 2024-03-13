@@ -27,7 +27,7 @@ class VehicleController extends AbstractController
         $this->em = $em;
     }
 
-    #[Route('/vehicles', name: 'app_vehicles')]
+    #[Route('/vehicle', name: 'app_vehicle')]
     public function index(Request $request): Response
     {
         $vehicle = new Vehicle();
@@ -39,7 +39,7 @@ class VehicleController extends AbstractController
             $this->em->persist($vehicle);
             $this->em->flush();
 
-            return $this->redirectToRoute('app_vehicles');
+            return $this->redirectToRoute('app_vehicle');
         }
 
         $vehicles = $this->em->getRepository(Vehicle::class)->findAll();
@@ -52,12 +52,12 @@ class VehicleController extends AbstractController
         ]);
     }
 
-    #[Route('/vehicles/track/{id}', name: 'app_track_vehicles')]
+    #[Route('/vehicle/track/{id}', name: 'app_track_vehicle')]
     public function track(VehicleModel $vehicleModel, $id): Response
     {
         if (empty($this->em->getRepository(Vehicle::class)->findOneBy(['id' => $id, 'user' => $this->getUser()]))) {
             $this->addFlash('warning', 'Vehicle not found.');
-            return $this->redirectToRoute('app_vehicles');
+            return $this->redirectToRoute('app_vehicle');
         }
 
         $speedChart = $vehicleModel->getChart(Speed::class, $id, 'Speed');
@@ -65,7 +65,7 @@ class VehicleController extends AbstractController
         $engineLoadChart = $vehicleModel->getChart(EngineLoad::class, $id, 'Engine load');
         $coolantTempChart = $vehicleModel->getChart(CoolantTemp::class, $id, 'Coolant temp');
 
-        return $this->render('vehicle/track_vehicles.html.twig', [
+        return $this->render('track_vehicle.html.twig', [
             'controller_name' => 'VehicleController',
             'speedChart' => $speedChart,
             'rpmChart' => $rpmChart,
@@ -75,7 +75,7 @@ class VehicleController extends AbstractController
         ]);
     }
 
-    #[Route('/vehicles/delete/{id}', name: 'app_delete_vehicles')]
+    #[Route('/vehicle/delete/{id}', name: 'app_delete_vehicle')]
     public function delete($id): Response
     {
         $vehicle = $this->em->getRepository(Vehicle::class)->findOneBy(['id' => $id]);
@@ -83,7 +83,7 @@ class VehicleController extends AbstractController
 
         if ($this->getUser()->getId() != $vehicleOwner->getId()) {
             $this->addFlash('danger', 'Vehicle not found.');
-            return $this->redirectToRoute('app_vehicles');
+            return $this->redirectToRoute('app_vehicle');
         }
         $device = $this->em->getRepository(Device::class)->findOneBy(['vehicle' => $vehicle]);
         $device->setVehicle(null);
@@ -93,10 +93,10 @@ class VehicleController extends AbstractController
         $this->em->flush();
 
         $this->addFlash('success', 'Vehicle deleted successfully.');
-        return $this->redirectToRoute('app_vehicles');
+        return $this->redirectToRoute('app_vehicle');
     }
 
-    #[Route('/vehicles/assign/{id}/{deviceId}', name: 'app_assign_vehicles')]
+    #[Route('/vehicle/assign/{id}/{deviceId}', name: 'app_assign_vehicle')]
     public function assign($id, $deviceId): Response
     {
         $vehicle = $this->em->getRepository(Vehicle::class)->findOneBy(['id' => $id]);
@@ -105,10 +105,10 @@ class VehicleController extends AbstractController
 
         $this->em->persist($device);
         $this->em->flush();
-        return $this->redirectToRoute('app_vehicles');
+        return $this->redirectToRoute('app_vehicle');
     }
 
-    #[Route('/vehicles/unassign_device/{id}', name: 'app_unassign_devices')]
+    #[Route('/vehicle/unassign_device/{id}', name: 'app_unassign_device')]
     public function unassign($id): Response
     {
         $device = $this->em->getRepository(Device::class)->findOneBy(['id' => $id]);
@@ -116,6 +116,6 @@ class VehicleController extends AbstractController
 
         $this->em->persist($device);
         $this->em->flush();
-        return $this->redirectToRoute('app_vehicles');
+        return $this->redirectToRoute('app_vehicle');
     }
 }
