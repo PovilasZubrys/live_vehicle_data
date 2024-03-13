@@ -17,8 +17,8 @@
     </div>
     <hr>
     <div class="container">
+        <h3>Data chart</h3>
         <div class="row">
-            <h3>Data chart</h3>
             <div class="col-6">
                 {{ render_chart(speedChart, {'data-controller': 'vehicle', 'data-data-type' : 'speed'}) }}
             </div>
@@ -27,7 +27,6 @@
             </div>
         </div>
         <div class="row">
-            <h3>Data chart</h3>
             <div class="col-6">
                 {{ render_chart(engineLoadChart, {'data-controller': 'vehicle', 'data-data-type' : 'engine_load'}) }}
             </div>
