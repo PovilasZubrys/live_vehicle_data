@@ -15,8 +15,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\UX\Chartjs\Builder\ChartBuilderInterface;
-use Symfony\UX\Chartjs\Model\Chart;
 
 class VehicleController extends AbstractController
 {
@@ -65,7 +63,7 @@ class VehicleController extends AbstractController
         $engineLoadChart = $vehicleModel->getChart(EngineLoad::class, $id, 'Engine load');
         $coolantTempChart = $vehicleModel->getChart(CoolantTemp::class, $id, 'Coolant temp');
 
-        return $this->render('track_vehicle.html.twig', [
+        return $this->render('vehicle/track_vehicle.html.twig', [
             'controller_name' => 'VehicleController',
             'speedChart' => $speedChart,
             'rpmChart' => $rpmChart,
