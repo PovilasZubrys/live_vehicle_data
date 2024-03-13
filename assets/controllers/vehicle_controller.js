@@ -27,7 +27,10 @@ export default class extends Controller {
         }
 
         function updateData(data, dataType) {
-            document.getElementById(dataType).innerHTML = data[dataType]
+            let element = document.getElementById(dataType)
+            if (element) {
+                document.getElementById(dataType).innerHTML = data[dataType]
+            }
         }
 
         function removeData(chart) {
