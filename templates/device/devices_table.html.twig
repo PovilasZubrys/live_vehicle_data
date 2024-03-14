@@ -1,0 +1,27 @@
+<table class="table table-hover table-dark">
+    <thead>
+    <tr>
+        <th scope="col">id</th>
+        <th scope="col">Name</th>
+        <th scope="col">Current active vehicle</th>
+        <th scope="col">Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for device in devices  %}
+        <tr>
+            <th scope="row">{{ device.id }}</th>
+            <td>{{ device.name }}</td>
+            <td>
+                {% if device.vehicle is not empty %}
+                    {{ device.vehicle.make }} {{ device.vehicle.model }} {{ device.vehicle.year }} (ID:{{ device.vehicle.id }})
+                {% endif %}
+            </td>
+            <td>
+                {% include 'device/delete_modal.html.twig' with {'device': device, 'action_path': 'app_delete_device'}%}
+                <a style="cursor: pointer; color: inherit" type="button" title="Delete device" data-bs-toggle="modal" data-bs-target="#staticBackdrop_device_{{ device.id }}" class="bi bi-trash"></a>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

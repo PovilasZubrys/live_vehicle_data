@@ -10,6 +10,7 @@ use App\Entity\Speed;
 use App\Entity\Vehicle;
 use App\Form\VehicleType;
 use App\Model\VehicleModel;
+use Detection\MobileDetect;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -46,7 +47,8 @@ class VehicleController extends AbstractController
         return $this->render('vehicle/index.html.twig', [
             'vehicles' => $vehicles,
             'form' => $form,
-            'devices' => $devices
+            'devices' => $devices,
+            'is_mobile' => (new MobileDetect())->isMobile()
         ]);
     }
 
