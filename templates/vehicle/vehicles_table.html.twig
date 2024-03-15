@@ -1,0 +1,62 @@
+<table class="table table-hover table-dark">
+    <thead>
+    <tr>
+        <th scope="col">id</th>
+        <th scope="col">Make</th>
+        <th scope="col">Model</th>
+        <th scope="col">Year</th>
+        <th scope="col">Type</th>
+        <th scope="col">Current device</th>
+        <th scope="col">Notification</th>
+        <th scope="col">Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for vehicle in vehicles  %}
+        <tr>
+            <th scope="row">{{ vehicle.id }}</th>
+            <td>{{ vehicle.make }}</td>
+            <td>{{ vehicle.model }}</td>
+            <td>{{ vehicle.year }}</td>
+            <td>{{ vehicle.type }}</td>
+            <td>
+                {% for device in vehicle.devices %}
+                    {{ device.name }} (ID: {{ device.id }})
+                {% endfor %}
+            </td>
+            <td>
+                {% if devices is empty and vehicle.devices is empty %}
+                    <i title="There are no available devices" class="bi bi-exclamation-triangle-fill"></i>
+                {% elseif vehicle.devices is empty %}
+                    <i title="No device assigned to this vehicle" class="bi bi-exclamation-triangle-fill"></i>
+                {% endif %}
+            </td>
+            <td>
+                {% if vehicle.devices is not empty %}
+                    <a style="cursor: pointer; color: inherit" href="{{ path('app_track_vehicle', {'id': vehicle.id}) }}" class="bi bi-activity" title="Check {{ vehicle.make }}, {{ vehicle.model }} data"></a>
+                    {% include 'vehicle/delete_modal.html.twig' with {'vehicle': vehicle, 'action_path': 'app_delete_vehicle'}%}
+                    <a style="cursor: pointer; color: inherit" type="button" title="Delete vehicle" data-bs-toggle="modal" data-bs-target="#staticBackdrop_vehicle_{{ vehicle.id }}" class="bi bi-trash"></a>
+
+                    {% for device in vehicle.devices %}
+                        {% include 'vehicle/unassign_device_modal.html.twig' with {'device': device, 'action_path': 'app_unassign_device'}%}
+                        <a style="cursor: pointer; color: inherit" type="button" title="Unassign device" data-bs-toggle="modal" data-bs-target="#staticBackdrop_device_{{ device.id }}" class="bi bi-heartbreak"></a>
+                    {% endfor %}
+
+                {% endif %}
+                {% if vehicle.devices is empty and devices is not empty %}
+                    <div class="btn-group">
+                        <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Assign device
+                        </button>
+                        <ul class="dropdown-menu">
+                            {% for device in devices %}
+                                <li><a class="dropdown-item" style="color: inherit" href="{{ path('app_assign_vehicle', {'id': vehicle.id, 'deviceId': device.id}) }}">{{ device.name }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

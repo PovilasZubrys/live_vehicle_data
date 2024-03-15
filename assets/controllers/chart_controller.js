@@ -1,28 +1,17 @@
 import { Controller } from '@hotwired/stimulus';
 
 let mercureEventSource = null;
-const myModal = document.getElementById('myModal')
-const myInput = document.getElementById('myInput')
 
 export default class extends Controller {
     connect() {
         this.element.addEventListener('chartjs:connect', this._onConnect);
         mercureEventSource = new EventSource(JSON.parse(document.getElementById('mercure-url').textContent))
-
-        myModal.addEventListener('shown.bs.modal', () => {
-            myInput.focus()
-        })
     }
 
     disconnect() {
-        // You should always remove listeners when the controller is disconnected to avoid side effects
         this.element.removeEventListener('chartjs:connect', this._onConnect);
         mercureEventSource && mercureEventSource.close()
         mercureEventSource = null
-
-        myModal.removeEventListener('shown.bs.modal', () => {
-            myInput.focus()
-        })
     }
 
     _onConnect(event) {
@@ -34,13 +23,6 @@ export default class extends Controller {
                 dataset.data.push(newData);
             });
             chart.update();
-        }
-
-        function updateData(data, dataType) {
-            let element = document.getElementById(dataType)
-            if (element) {
-                document.getElementById(dataType).innerHTML = data[dataType]
-            }
         }
 
         function removeData(chart) {
@@ -59,7 +41,6 @@ export default class extends Controller {
             let data = JSON.parse(mercureEvent.data)
             if (data[dataType]) {
                 addData(event.detail.chart, data[dataType])
-                updateData(data, dataType)
                 removeData(event.detail.chart)
             }
         }
