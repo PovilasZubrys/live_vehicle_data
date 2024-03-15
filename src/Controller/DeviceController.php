@@ -7,6 +7,7 @@ use App\Entity\Vehicle;
 use App\Form\DeviceType;
 use App\Model\DeviceModel;
 use App\Model\VehicleModel;
+use Detection\MobileDetect;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -39,10 +40,12 @@ class DeviceController extends AbstractController
         }
 
         $devices = $this->em->getRepository(Device::class)->findAll();
+
         return $this->render('device/index.html.twig', [
             'controller_name' => 'DeviceController',
             'devices' => $devices,
-            'form' => $form
+            'form' => $form,
+            'is_mobile' => (new MobileDetect())->isMobile()
         ]);
     }
 

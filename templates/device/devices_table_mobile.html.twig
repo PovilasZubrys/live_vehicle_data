@@ -1,0 +1,24 @@
+<div class="accordion" id="accordion_table">
+    {% for device in devices %}
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_{{ device.id }}" aria-expanded="true" aria-controls="collapse_{{ device.id }}">
+                    {{ device.name }}  (ID: {{ device.id }})
+                </button>
+            </h2>
+            <div id="collapse_{{ device.id }}" class="accordion-collapse collapse" data-bs-parent="#accordion_table">
+                <div class="accordion-body">
+                    <div class="container">
+                        <div class="row">
+                            {% if device.vehicle is not empty %}
+                                <span class="col-6 text-start">Current vehicle:</span><span class="col-6 text-end">{{ device.vehicle.make }} {{ device.vehicle.model }} {{ device.vehicle.year }} (ID:{{ device.vehicle.id }})</span>
+                            {% endif %}
+                            {% include 'device/delete_modal.html.twig' with {'device': device, 'action_path': 'app_delete_device'}%}
+                            <button style="margin: 5px 5px" title="Delete device" data-bs-toggle="modal" data-bs-target="#staticBackdrop_device_{{ device.id }}" type="button" data-bs-toggle="modal" data-bs-target="#staticBackdrop_vehicle_{{ device.id }}" class="btn btn-danger">Delete device</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
