@@ -9,33 +9,32 @@
     <div class="container">
         <div class="row">
             <h3>Current data</h3>
-            <div class="col-12">
+            <div class="col-12" data-controller="track">
                 <span id="speed" class="text-start"></span><span> km/h</span>
                 <span id="rpm" class="text-end"></span><span> rpm</span>
             </div>
         </div>
+        <hr>
+        {% if is_mobile == false %}
+            <div class="row">
+                <h3>Data chart</h3>
+                <div class="row">
+                    <div class="col-6">
+                        {{ render_chart(speedChart, {'data-controller': 'chart', 'data-data-type' : 'speed'}) }}
+                    </div>
+                    <div class="col-6">
+                        {{ render_chart(rpmChart, {'data-controller': 'chart', 'data-data-type': 'rpm'}) }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        {{ render_chart(engineLoadChart, {'data-controller': 'chart', 'data-data-type' : 'engine_load'}) }}
+                    </div>
+                    <div class="col-6">
+                        {{ render_chart(coolantTempChart, {'data-controller': 'chart', 'data-data-type' : 'coolant_temp'}) }}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
     </div>
-    <hr>
-    {% if is_mobile == false %}
-        <div class="container">
-            <h3>Data chart</h3>
-            <div class="row">
-                <div class="col-6">
-                    {{ render_chart(speedChart, {'data-controller': 'vehicle', 'data-data-type' : 'speed'}) }}
-                </div>
-                <div class="col-6">
-                    {{ render_chart(rpmChart, {'data-controller': 'vehicle', 'data-data-type': 'rpm'}) }}
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-6">
-                    {{ render_chart(engineLoadChart, {'data-controller': 'vehicle', 'data-data-type' : 'engine_load'}) }}
-                </div>
-                <div class="col-6">
-                    {{ render_chart(coolantTempChart, {'data-controller': 'vehicle', 'data-data-type' : 'coolant_temp'}) }}
-                </div>
-            </div>
-        </div>
-    {% endif %}
-
 {% endblock %}
