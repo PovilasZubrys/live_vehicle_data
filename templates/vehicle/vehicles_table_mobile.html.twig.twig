@@ -1,0 +1,54 @@
+<div class="accordion" id="accordion_table">
+    {% for vehicle in vehicles %}
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_{{ vehicle.id }}" aria-expanded="true" aria-controls="collapse_{{ vehicle.id }}">
+                    {{ vehicle.make }} {{ vehicle.model }} {{ vehicle.year }} (ID: {{ vehicle.id }})
+                </button>
+            </h2>
+            <div id="collapse_{{ vehicle.id }}" class="accordion-collapse collapse" data-bs-parent="#accordion_table">
+                <div class="accordion-body">
+                    <div class="container">
+                        <div class="row">
+                            {% for device in vehicle.devices %}
+                                <span class="col-6 text-start">Current device:</span><span class="col-6 text-end">{{ device.name }}</span>
+                            {% endfor %}
+                            {% if devices is empty and vehicle.devices is empty %}
+                                <span class="col-6 text-start">Notification:</span>
+                                <span class="col-6 text-end">
+                                    <i>There are no available devices</i>
+                                </span>
+                            {% elseif vehicle.devices is empty %}
+                                <span class="col-6 text-start">Notification:</span>
+                                <span class="col-6 text-end">
+                                    <i>No device assign to this vehicle</i>
+                                </span>
+                            {% endif %}
+                            {% if vehicle.devices is not empty %}
+                                <a href="{{ path('app_track_vehicle', {'id': vehicle.id}) }}" style="margin: 5px 5px" title="Track vehicle" type="button" class="btn btn-success col-12">Track vehicle</a>
+                                {% for device in vehicle.devices %}
+                                    {% include 'vehicle/unassign_device_modal.html.twig' with {'device': device, 'action_path': 'app_unassign_device'}%}
+                                    <a style="margin: 5px 5px" title="Unassign device" type="button" data-bs-toggle="modal" data-bs-target="#staticBackdrop_device_{{ device.id }}"  class="btn btn-warning">Unassign device</a>
+                                    {% include 'vehicle/delete_modal.html.twig' with {'vehicle': vehicle, 'action_path': 'app_delete_vehicle'}%}
+                                    <a style="margin: 5px 5px" title="Delete vehicle" type="button" data-bs-toggle="modal" data-bs-target="#staticBackdrop_vehicle_{{ vehicle.id }}" class="btn btn-danger">Delete vehicle</a>
+                                {% endfor %}
+                            {% endif %}
+                            {% if vehicle.devices is empty and devices is not empty %}
+                                <div class="btn-group">
+                                    <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Assign device
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        {% for device in devices %}
+                                            <li><a class="dropdown-item" style="color: inherit" href="{{ path('app_assign_vehicle', {'id': vehicle.id, 'deviceId': device.id}) }}">{{ device.name }}</a></li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
