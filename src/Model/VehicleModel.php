@@ -20,15 +20,15 @@ class VehicleModel
 
     public function getChart($dataEntity, $vehicleId, $label): object
     {
-        $chartBuilder = new ChartBuilder();
-        $chart = $chartBuilder->createChart(Chart::TYPE_LINE);
-
         $data = $this->em->getRepository($dataEntity)->findBy(['vehicle' => $vehicleId], ['id' => 'DESC'], 50);
 
         $results = [];
         foreach ($data as $result) {
             $results[] = (int) $result->getValue();
         }
+
+        $chartBuilder = new ChartBuilder();
+        $chart = $chartBuilder->createChart(Chart::TYPE_LINE);
 
         $chart->setData([
             'labels' => $results,

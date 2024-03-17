@@ -60,25 +60,14 @@ class VehicleController extends AbstractController
             return $this->redirectToRoute('app_vehicle');
         }
 
-        $detect = (new MobileDetect())->isMobile();
-        if (!$detect) {
-            $speedChart = $vehicleModel->getChart(Speed::class, $id, 'Speed');
-            $rpmChart = $vehicleModel->getChart(Rpm::class, $id, 'Rpm');
-            $engineLoadChart = $vehicleModel->getChart(EngineLoad::class, $id, 'Engine load');
-            $coolantTempChart = $vehicleModel->getChart(CoolantTemp::class, $id, 'Coolant temp');
-        }
-
-        $renderData = [
-            'mercure_url' => '/vehicle_data/' . $id,
-            'is_mobile' => $detect
+        $renderData = [];
+        $renderData['mercure_url'] = '/vehicle_data/' . $id;
+        $renderData['charts'] = [
+            'speed' => $vehicleModel->getChart(Speed::class, $id, 'Speed'),
+            'rpm' => $vehicleModel->getChart(Rpm::class, $id, 'Rpm'),
+            'engine_load' => $vehicleModel->getChart(EngineLoad::class, $id, 'Engine load'),
+            'coolant_temp' => $vehicleModel->getChart(CoolantTemp::class, $id, 'Coolant temp')
         ];
-
-        if (!$detect) {
-            $renderData['speedChart'] = $speedChart;
-            $renderData['rpmChart'] = $rpmChart;
-            $renderData['engineLoadChart'] = $engineLoadChart;
-            $renderData['coolantTempChart'] = $coolantTempChart;
-        }
 
         return $this->render('vehicle/track_vehicle.html.twig', $renderData);
     }
