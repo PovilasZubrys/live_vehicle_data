@@ -15,26 +15,13 @@
             </div>
         </div>
         <hr>
-        {% if is_mobile == false %}
-            <div class="row">
-                <h3>Data chart</h3>
-                <div class="row">
-                    <div class="col-6">
-                        {{ render_chart(speedChart, {'data-controller': 'chart', 'data-data-type' : 'speed'}) }}
-                    </div>
-                    <div class="col-6">
-                        {{ render_chart(rpmChart, {'data-controller': 'chart', 'data-data-type': 'rpm'}) }}
-                    </div>
+        <div class="row">
+            <h3>Data charts</h3>
+            {% for dataType, chart in charts %}
+                <div class="col-sm-12 col-lg-6">
+                    {{ render_chart(chart, {'data-controller': 'chart', 'data-data-type' : dataType}) }}
                 </div>
-                <div class="row">
-                    <div class="col-6">
-                        {{ render_chart(engineLoadChart, {'data-controller': 'chart', 'data-data-type' : 'engine_load'}) }}
-                    </div>
-                    <div class="col-6">
-                        {{ render_chart(coolantTempChart, {'data-controller': 'chart', 'data-data-type' : 'coolant_temp'}) }}
-                    </div>
-                </div>
-            </div>
-        {% endif %}
+            {% endfor %}
+        </div>
     </div>
 {% endblock %}
