@@ -14,22 +14,23 @@
                 {% endif %}
             </div>
         </div>
+        <hr>
         <div class="row">
             <div class="col">
                 <h1>Add vehicles</h1>
                 {{ form_start(form) }}
+                <div class="form-floating mb-3">
                     {{ form_widget(form.type) }}
-                <hr>
+                    {{ form_label(form.type) }}
+                </div>
                 <div class="form-floating mb-3">
                     {{ form_widget(form.make) }}
                     {{ form_label(form.make) }}
                 </div>
-                <hr>
                 <div class="form-floating mb-3">
                     {{ form_widget(form.model) }}
                     {{ form_label(form.model) }}
                 </div>
-                <hr>
                 <div class="form-floating mb-3">
                     {{ form_widget(form.year) }}
                     {{ form_label(form.year) }}
@@ -37,5 +38,6 @@
                 {{ form_end(form) }}
             </div>
         </div>
+        <hr>
     </div>
 {% endblock %}

@@ -20,12 +20,16 @@ class VehicleType extends AbstractType
         $builder
             ->add('type', ChoiceType::class, [
                 'choices' => [
-                    'Choose your vehicle' => '',
-                    'car' => 'car',
-                    'motorcycle' => 'motorcycle',
-                    'van' => 'van'
+                    'Choose' => '',
+                    'Car' => 'car',
+                    'Motorcycle' => 'motorcycle',
+                    'Van' => 'van'
                 ],
-                'attr' => ['class' => 'form-select'],
+                'attr' => [
+                    'class' => 'form-select',
+                    'placeholder' => 'Your vehicle type',
+                    ],
+                'label' => 'Your vehicle type',
             ])
             ->add('make', TextType::class, [
                 'attr' => [
