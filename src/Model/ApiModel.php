@@ -4,6 +4,7 @@ namespace App\Model;
 
 use App\Entity\CoolantTemp;
 use App\Entity\EngineLoad;
+use App\Entity\Gps;
 use App\Entity\Rpm;
 use App\Entity\Speed;
 use App\Entity\Vehicle;
@@ -17,7 +18,8 @@ class ApiModel
         'speed' => Speed::class,
         'rpm' => Rpm::class,
         'engine_load' => EngineLoad::class,
-        'coolant_temp' => CoolantTemp::class
+        'coolant_temp' => CoolantTemp::class,
+        'gps' => Gps::class
     ];
 
     public function __construct(EntityManagerInterface $em)
@@ -37,7 +39,12 @@ class ApiModel
                 $dataEntity = self::DATATYPE_ENTITIES[$dataPoint->data_type];
                 $dataEntity = new $dataEntity;
 
-                $dataEntity->setValue($dataPoint->value);
+                if ($dataPoint->data_type == 'gps') {
+                    $dataEntity->setLatitude($dataPoint->value->latitude);
+                    $dataEntity->setLongitude($dataPoint->value->longitude);
+                } else {
+                    $dataEntity->setValue($dataPoint->value);
+                }
                 $dataEntity->setDate($dataPoint->date);
                 $dataEntity->setVehicle($result['vehicle']);
 
