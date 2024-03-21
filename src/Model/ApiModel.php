@@ -40,8 +40,8 @@ class ApiModel
                 $dataEntity = new $dataEntity;
 
                 if ($dataPoint->data_type == 'gps') {
-                    $dataEntity->setLatitude($dataPoint->value->latitude);
-                    $dataEntity->setLongitude($dataPoint->value->longitude);
+                    $dataEntity->setLatitude(json_decode($dataPoint->value)->latitude);
+                    $dataEntity->setLongitude(json_decode($dataPoint->value)->longitude);
                 } else {
                     $dataEntity->setValue($dataPoint->value);
                 }
