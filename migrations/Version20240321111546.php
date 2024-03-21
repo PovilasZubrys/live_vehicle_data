@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20240319094248 extends AbstractMigration
+final class Version20240321111546 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -25,6 +25,7 @@ final class Version20240319094248 extends AbstractMigration
         $this->addSql('CREATE TABLE device (id INT AUTO_INCREMENT NOT NULL, user_id INT DEFAULT NULL, vehicle_id INT DEFAULT NULL, name VARCHAR(255) NOT NULL, authentication_token VARCHAR(255) NOT NULL, INDEX IDX_92FB68EA76ED395 (user_id), INDEX IDX_92FB68E545317D1 (vehicle_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE engine_load (id INT AUTO_INCREMENT NOT NULL, vehicle_id INT DEFAULT NULL, value VARCHAR(255) NOT NULL, date DATETIME NOT NULL, INDEX IDX_4F3D22E2545317D1 (vehicle_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE fuel_level (id INT AUTO_INCREMENT NOT NULL, value VARCHAR(255) NOT NULL, date DATETIME NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE gps (id INT AUTO_INCREMENT NOT NULL, vehicle_id INT NOT NULL, latitude DOUBLE PRECISION NOT NULL, longitude DOUBLE PRECISION NOT NULL, date DATETIME NOT NULL, INDEX IDX_54EA5DC7545317D1 (vehicle_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE oil_temp (id INT AUTO_INCREMENT NOT NULL, value VARCHAR(255) NOT NULL, date DATETIME NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE rpm (id INT AUTO_INCREMENT NOT NULL, vehicle_id INT NOT NULL, value VARCHAR(255) NOT NULL, date DATETIME NOT NULL, INDEX IDX_B408013F545317D1 (vehicle_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE run_time (id INT AUTO_INCREMENT NOT NULL, value VARCHAR(255) NOT NULL, date DATETIME NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
@@ -36,6 +37,7 @@ final class Version20240319094248 extends AbstractMigration
         $this->addSql('ALTER TABLE device ADD CONSTRAINT FK_92FB68EA76ED395 FOREIGN KEY (user_id) REFERENCES user (id)');
         $this->addSql('ALTER TABLE device ADD CONSTRAINT FK_92FB68E545317D1 FOREIGN KEY (vehicle_id) REFERENCES vehicle (id)');
         $this->addSql('ALTER TABLE engine_load ADD CONSTRAINT FK_4F3D22E2545317D1 FOREIGN KEY (vehicle_id) REFERENCES vehicle (id)');
+        $this->addSql('ALTER TABLE gps ADD CONSTRAINT FK_54EA5DC7545317D1 FOREIGN KEY (vehicle_id) REFERENCES vehicle (id)');
         $this->addSql('ALTER TABLE rpm ADD CONSTRAINT FK_B408013F545317D1 FOREIGN KEY (vehicle_id) REFERENCES vehicle (id)');
         $this->addSql('ALTER TABLE speed ADD CONSTRAINT FK_F26FEF6545317D1 FOREIGN KEY (vehicle_id) REFERENCES vehicle (id)');
         $this->addSql('ALTER TABLE vehicle ADD CONSTRAINT FK_1B80E486A76ED395 FOREIGN KEY (user_id) REFERENCES user (id)');
@@ -48,6 +50,7 @@ final class Version20240319094248 extends AbstractMigration
         $this->addSql('ALTER TABLE device DROP FOREIGN KEY FK_92FB68EA76ED395');
         $this->addSql('ALTER TABLE device DROP FOREIGN KEY FK_92FB68E545317D1');
         $this->addSql('ALTER TABLE engine_load DROP FOREIGN KEY FK_4F3D22E2545317D1');
+        $this->addSql('ALTER TABLE gps DROP FOREIGN KEY FK_54EA5DC7545317D1');
         $this->addSql('ALTER TABLE rpm DROP FOREIGN KEY FK_B408013F545317D1');
         $this->addSql('ALTER TABLE speed DROP FOREIGN KEY FK_F26FEF6545317D1');
         $this->addSql('ALTER TABLE vehicle DROP FOREIGN KEY FK_1B80E486A76ED395');
@@ -56,6 +59,7 @@ final class Version20240319094248 extends AbstractMigration
         $this->addSql('DROP TABLE device');
         $this->addSql('DROP TABLE engine_load');
         $this->addSql('DROP TABLE fuel_level');
+        $this->addSql('DROP TABLE gps');
         $this->addSql('DROP TABLE oil_temp');
         $this->addSql('DROP TABLE rpm');
         $this->addSql('DROP TABLE run_time');
