@@ -46,6 +46,9 @@ class Vehicle
     #[ORM\OneToMany(targetEntity: CoolantTemp::class, mappedBy: 'vehicle')]
     private Collection $coolantTemps;
 
+    #[ORM\OneToMany(targetEntity: Gps::class, mappedBy: 'vehicle', orphanRemoval: true)]
+    private Collection $gps;
+
     public function __construct()
     {
         $this->speeds = new ArrayCollection();
@@ -53,6 +56,7 @@ class Vehicle
         $this->devices = new ArrayCollection();
         $this->engineLoads = new ArrayCollection();
         $this->coolantTemps = new ArrayCollection();
+        $this->gps = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -264,6 +268,36 @@ class Vehicle
             // set the owning side to null (unless already changed)
             if ($coolantTemp->getVehicle() === $this) {
                 $coolantTemp->setVehicle(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Gps>
+     */
+    public function getGps(): Collection
+    {
+        return $this->gps;
+    }
+
+    public function addGp(Gps $gp): static
+    {
+        if (!$this->gps->contains($gp)) {
+            $this->gps->add($gp);
+            $gp->setVehicle($this);
+        }
+
+        return $this;
+    }
+
+    public function removeGp(Gps $gp): static
+    {
+        if ($this->gps->removeElement($gp)) {
+            // set the owning side to null (unless already changed)
+            if ($gp->getVehicle() === $this) {
+                $gp->setVehicle(null);
             }
         }
 

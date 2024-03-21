@@ -21,6 +21,10 @@ export default class extends Controller {
             let dataType = Object.keys(data)[0]
             let element = document.getElementById(dataType)
 
+            if (dataType == 'gps') {
+                data[dataType] = 'Latitude: ' + data[dataType]['latitude'] + ' longitude: ' + data[dataType]['latitude']
+            }
+
             if (element != null) {
                 document.getElementById(dataType).innerHTML = data[dataType]
             }
