@@ -22,7 +22,7 @@ export default class extends Controller {
             let element = document.getElementById(dataType)
 
             if (dataType == 'gps') {
-                data[dataType] = 'Latitude: ' + data[dataType]['latitude'] + ' longitude: ' + data[dataType]['latitude']
+                data[dataType] = 'Latitude: ' + data[dataType]['latitude'] + ' longitude: ' + data[dataType]['longitude']
             }
 
             if (element != null) {
