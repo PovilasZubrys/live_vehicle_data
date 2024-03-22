@@ -43,7 +43,6 @@ security:
     access_control:
          - { path: ^/api/* }
          - { path: ^/login }
-         - { path: ^/register }
          - { path: ^/*, roles: ROLE_USER }
 
 when@test:
