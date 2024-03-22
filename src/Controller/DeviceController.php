@@ -3,14 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Device;
-use App\Entity\Vehicle;
 use App\Form\DeviceType;
-use App\Model\DeviceModel;
-use App\Model\VehicleModel;
 use Detection\MobileDetect;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
