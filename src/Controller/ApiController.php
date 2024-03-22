@@ -22,4 +22,11 @@ class ApiController extends AbstractController
 
         return $response;
     }
+
+    #[Route('/api/get/test', name: 'app_get_test', methods: 'GET')]
+    public function getTest(): Response
+    {
+
+        return $this->json('test');
+    }
 }
