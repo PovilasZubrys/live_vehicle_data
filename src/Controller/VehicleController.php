@@ -115,4 +115,17 @@ class VehicleController extends AbstractController
         $this->em->flush();
         return $this->redirectToRoute('app_vehicle');
     }
+
+    #[Route('/vehicle/test', name: 'app_test')]
+    public function publish(HubInterface $hub): Response
+    {
+        $update = new Update(
+            '/vehicle_data/1',
+            json_encode(['status' => 'OutOfStock'])
+        );
+
+        $hub->publish($update);
+
+        return new Response('published!');
+    }
 }
