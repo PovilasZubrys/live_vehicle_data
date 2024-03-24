@@ -39,7 +39,6 @@ export default class extends Controller {
             }
 
             let data = JSON.parse(mercureEvent.data)
-            console.log(data)
             if (data[dataType]) {
                 if (dataType === 'engine_load') {
                     data[dataType] = data[dataType].toFixed(2)
