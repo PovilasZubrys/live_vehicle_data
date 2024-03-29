@@ -22,12 +22,4 @@ class ApiController extends AbstractController
 
         return $response;
     }
-
-    #[Route('/api/get/test', name: 'app_get_test', methods: 'POST')]
-    public function getTest(Request $request): Response
-    {
-        $data['content'] = $request->getContent();
-        $data['ip'] = $request->getClientIp();
-        return $this->json($data);
-    }
 }
